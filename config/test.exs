@@ -13,7 +13,7 @@ config :logger, level: :warn
 config :ping, Ping.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
-  password: "postgres",
+  password: "22143521",
   database: "ping_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox

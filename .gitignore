@@ -4,6 +4,7 @@
 /deps
 /*.ez
 /log
+*.swp
 # Generated on crash by the VM
 erl_crash.dump
 

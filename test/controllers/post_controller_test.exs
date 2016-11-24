@@ -2,7 +2,7 @@ defmodule Ping.PostControllerTest do
   use Ping.ConnCase
 
   alias Ping.Post
-  @valid_attrs %{dream: "some content", process: 42, reality: "some content"}
+  @valid_attrs %{dream: "some content", progress: 42, reality: "some content", user_id: 1}
   @invalid_attrs %{}
 
   setup %{conn: conn} do
@@ -20,7 +20,7 @@ defmodule Ping.PostControllerTest do
     assert json_response(conn, 200)["data"] == %{"id" => post.id,
       "dream" => post.dream,
       "reality" => post.reality,
-      "process" => post.process}
+      "process" => post.progress}
   end
 
   test "renders page not found when id is nonexistent", %{conn: conn} do
@@ -30,9 +30,9 @@ defmodule Ping.PostControllerTest do
   end
 
   test "creates and renders resource when data is valid", %{conn: conn} do
-    conn = post conn, post_path(conn, :create), post: @valid_attrs
+    conn = post conn, post_path(conn, :create), @valid_attrs
     assert json_response(conn, 201)["data"]["id"]
-    assert Repo.get_by(Post, @valid_attrs)
+    assert Repo.get_by(Post, progress: @valid_attrs.progress)
   end
 
   test "does not create resource and renders errors when data is invalid", %{conn: conn} do
@@ -44,7 +44,7 @@ defmodule Ping.PostControllerTest do
     post = Repo.insert! %Post{}
     conn = put conn, post_path(conn, :update, post), post: @valid_attrs
     assert json_response(conn, 200)["data"]["id"]
-    assert Repo.get_by(Post, @valid_attrs)
+    assert Repo.get_by(Post, progress: @valid_attrs.progress)
   end
 
   test "does not update chosen resource and renders errors when data is invalid", %{conn: conn} do

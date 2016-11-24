@@ -3,7 +3,7 @@ defmodule Ping.PostTest do
 
   alias Ping.Post
 
-  @valid_attrs %{dream: "some content", process: 42, reality: "some content"}
+  @valid_attrs %{dream: "some content", progress: 42, reality: "some content", user_id: 1}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

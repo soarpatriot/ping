@@ -3,14 +3,15 @@ defmodule Ping.UserController do
 
   alias Ping.User
 
-  def index(conn, _params) do
-    users = Repo.all(User)
-    render(conn, "index.json", users: users)
-  end
+  #def index(conn, _params) do
+  #  users = Repo.all(User)
+  #   render(conn, "index.json", users: users)
+  # end
 
   def create(conn, user_params) do
     changeset = User.changeset(%User{}, user_params)
-
+     
+    
     case Repo.insert(changeset) do
       {:ok, user} ->
         conn
