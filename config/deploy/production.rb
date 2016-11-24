@@ -2,7 +2,7 @@ set :stage, :production
 set :server_name, "api.dreamreality.cn"
 set :branch, "master"
 set :deploy_to, "/data/www/ping"
-
+set :mix_env, 'prod'
 server fetch(:server_name), user: "soar", roles: %w{web app db}
 
 

@@ -35,16 +35,33 @@ set :linked_dirs, fetch(:linked_dirs, [])
 
 # Default value for keep_releases is 5
 set :keep_releases, 5
-
+# set :phoenix_mix_env -> 'prod' #default fetch(:mix_env)
 namespace :deploy do
-
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
+  def is_application_running?()
+    pid = capture(%Q{ps ax -o pid= -o command=|grep "rel/#{fetch(:application)}/.*/[b]eam"|awk '{print $1}'})
+    return pid != ""
+  end
+  task :build do
+    on roles(:all), in: :sequence do
+      within release_path  do
+        execute :mix, "deps.get && MIX_ENV=#{fetch(:mix_env)} mix compile  && MIX_ENV=#{fetch(:mix_env)} mix release"
+      end
     end
   end
+ 
+  desc 'restart phoenix app'
+  task :restart do
+    on roles(:all), in: :sequence do
+      within current_path  do
 
+        if is_application_running?
+          execute "rel/#{fetch(:application)}/bin/#{fetch(:application)}", "stop"
+        end
+        execute "rel/#{fetch(:application)}/bin/#{fetch(:application)}", "start -detached"
+      end
+    end
+  end
+  after :publishing, "build"
+  after :published, "restart"
 end
+
