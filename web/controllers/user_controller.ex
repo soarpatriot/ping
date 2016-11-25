@@ -43,7 +43,25 @@ defmodule Ping.UserController do
         |> render(Ping.ChangesetView, "error.json", changeset: changeset)
     end
   end
-
+  def save_or_update(conn, user_params) do 
+    user = Repo.get_by(User, openid: user_params["openid"])
+    result = 
+      case user do 
+        nil ->  %User{} 
+        user -> user 
+      end
+      |> User.changeset(user_params)
+      |> Repo.insert_or_update
+    case result do
+        {:ok, result}       -> # Inserted or updated with success
+          render(conn, "show.json", user: result)
+        {:error, user_params} -> # Something went wrong
+          conn
+          |> put_status(:unprocessable_entity)
+          |> render(Ping.ChangesetView, "error.json", changeset: user_params)
+ 
+    end 
+  end
   def delete(conn, %{"id" => id}) do
     user = Repo.get!(User, id)
 

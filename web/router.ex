@@ -24,5 +24,6 @@ defmodule Ping.Router do
     pipe_through :api
     resources "/posts", PostController
     resources "/users", UserController 
+    post "/users/me", UserController, :save_or_update
   end
 end

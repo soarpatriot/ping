@@ -1,9 +1,9 @@
 defmodule Ping.UserControllerTest do
   use Ping.ConnCase
-
   alias Ping.User
   @valid_attrs %{country: "some content", headimgurl: "some content", 
-    nickname: "some content", openid: "some content", province: "some content", sex: "some content"}
+    nickname: "some content", 
+    openid: "some content", province: "some content", sex: "some content"}
   @invalid_attrs %{}
 
   setup %{conn: conn} do
@@ -57,6 +57,12 @@ defmodule Ping.UserControllerTest do
     conn = put conn, user_path(conn, :update, user), user: @invalid_attrs
     assert json_response(conn, 422)["errors"] != %{}
   end
+  
+  test "insert or update user insert is invalid", %{conn: conn} do
+    conn = post conn, user_path(conn, :save_or_update), @valid_attrs
+    assert json_response(conn, 200)["data"]["id"]
+  end
+
 
   test "deletes chosen resource", %{conn: conn} do
     user = Repo.insert! %User{}
