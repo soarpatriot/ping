@@ -7,7 +7,7 @@ defmodule Ping.UserControllerTest do
     openid: "some content", 
     province: "some content", 
     city: "some content", 
-    gender: "some content"}
+    gender: 1}
   @invalid_attrs %{}
 
   setup %{conn: conn} do

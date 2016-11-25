@@ -4,7 +4,7 @@ defmodule Ping.User do
   schema "users" do
     field :openid, :string
     field :nickname, :string
-    field :gender, :string
+    field :gender, :integer
     field :province, :string
     field :country, :string
     field :city, :string

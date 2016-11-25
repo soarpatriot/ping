@@ -6,7 +6,7 @@ defmodule Ping.UserTest do
   @valid_attrs %{country: "some content", avatar_url: "some content", 
    nickname: "some content", openid: "some content", 
    city: "some",
-   province: "some content", gender: "some content"}
+   province: "some content", gender: 1}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do
