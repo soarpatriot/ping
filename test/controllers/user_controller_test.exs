@@ -58,10 +58,17 @@ defmodule Ping.UserControllerTest do
     assert json_response(conn, 422)["errors"] != %{}
   end
   
-  test "insert or update user insert is invalid", %{conn: conn} do
+  test "insert or update user insert is valid", %{conn: conn} do
     conn = post conn, user_path(conn, :save_or_update), @valid_attrs
     assert json_response(conn, 200)["data"]["id"]
   end
+  test "insert or update user update is valid", %{conn: conn} do
+    user =User.changeset(%User{}, @valid_attrs)
+      |> Repo.insert! 
+    conn = post conn, user_path(conn, :save_or_update), @valid_attrs
+    assert json_response(conn, 200)["data"]["id"]
+  end
+
 
 
   test "deletes chosen resource", %{conn: conn} do
