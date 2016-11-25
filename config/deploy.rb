@@ -44,7 +44,7 @@ namespace :deploy do
   task :build do
     on roles(:all), in: :sequence do
       within release_path  do
-        execute :mix, "deps.get && MIX_ENV=#{fetch(:mix_env)} mix compile  && MIX_ENV=#{fetch(:mix_env)} mix release"
+        execute :mix, "deps.get && MIX_ENV=#{fetch(:mix_env)} mix ecto.migrate && MIX_ENV=#{fetch(:mix_env)} mix compile  && MIX_ENV=#{fetch(:mix_env)} mix release"
       end
     end
   end
