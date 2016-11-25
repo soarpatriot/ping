@@ -1,9 +1,13 @@
 defmodule Ping.UserControllerTest do
   use Ping.ConnCase
   alias Ping.User
-  @valid_attrs %{country: "some content", headimgurl: "some content", 
+  @valid_attrs %{country: "some content", 
+   avatar_url: "some content", 
     nickname: "some content", 
-    openid: "some content", province: "some content", sex: "some content"}
+    openid: "some content", 
+    province: "some content", 
+    city: "some content", 
+    gender: "some content"}
   @invalid_attrs %{}
 
   setup %{conn: conn} do
@@ -22,10 +26,11 @@ defmodule Ping.UserControllerTest do
     assert json_response(conn, 200)["data"] == %{"id" => user.id,
       "openid" => user.openid,
       "nickname" => user.nickname,
-      "sex" => user.sex,
+      "gender" => user.gender,
       "province" => user.province,
+      "city" => user.city,
       "country" => user.country,
-      "headimgurl" => user.headimgurl}
+      "avatar_url" => user.avatar_url}
   end
 
   test "renders page not found when id is nonexistent", %{conn: conn} do

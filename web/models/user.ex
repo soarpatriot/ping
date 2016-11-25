@@ -4,10 +4,11 @@ defmodule Ping.User do
   schema "users" do
     field :openid, :string
     field :nickname, :string
-    field :sex, :string
+    field :gender, :string
     field :province, :string
     field :country, :string
-    field :headimgurl, :string
+    field :city, :string
+    field :avatar_url, :string
     
     has_many :posts, Ping.Post
     timestamps()
@@ -18,7 +19,7 @@ defmodule Ping.User do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:openid, :nickname, :sex, :province, :country, :headimgurl])
-    |> validate_required([:openid, :nickname, :headimgurl])
+    |> cast(params, [:openid, :nickname, :gender, :province, :country, :avatar_url,:city])
+    |> validate_required([:openid, :nickname, :avatar_url])
   end
 end

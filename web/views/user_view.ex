@@ -13,9 +13,10 @@ defmodule Ping.UserView do
     %{id: user.id,
       openid: user.openid,
       nickname: user.nickname,
-      sex: user.sex,
+      gender: user.gender,
       province: user.province,
       country: user.country,
-      headimgurl: user.headimgurl}
+      city: user.city,
+      avatar_url: user.avatar_url}
   end
 end

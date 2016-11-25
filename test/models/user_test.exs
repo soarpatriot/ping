@@ -3,7 +3,10 @@ defmodule Ping.UserTest do
 
   alias Ping.User
 
-  @valid_attrs %{country: "some content", headimgurl: "some content", nickname: "some content", openid: "some content", province: "some content", sex: "some content"}
+  @valid_attrs %{country: "some content", avatar_url: "some content", 
+   nickname: "some content", openid: "some content", 
+   city: "some",
+   province: "some content", gender: "some content"}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do
