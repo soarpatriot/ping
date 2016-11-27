@@ -2,13 +2,37 @@ defmodule Ping.PostControllerTest do
   use Ping.ConnCase
 
   alias Ping.Post
+  alias Ping.User
   @valid_attrs %{dream: "some content", progress: 42, reality: "some content", user_id: 1}
   @invalid_attrs %{}
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
+  
+  test "page the empty list ", %{conn: conn} do 
+    conn = get conn, post_path(conn, :page)
+    assert json_response(conn, 200)["data"] == []
+  end
+  test "page the not empty list", %{conn: conn} do 
+    user =  Repo.insert! User.changeset(%User{}, %{nickname: "121", avatar_url: "http://www.a/b.jpg", openid: "12213"})
+    changeset = Post.changeset(%Post{}, @valid_attrs) 
+                |> Ecto.Changeset.put_change(:user_id, user.id)
+    Repo.insert! changeset
+    conn = get conn, post_path(conn, :page)
+    post = hd(json_response(conn,200)["data"])
+    #IO.inspect  post
+    assert  %{"id" => post["id"],
+      "dream" => post["dream"],
+      "reality" => post["reality"],
+      "progress" => post["progress"],
+      "user_id" => user.id,
+      "nickname" => user.nickname,
+      "avatar_url" => user.avatar_url
+       }
 
+  end
+ 
   test "lists all entries on index", %{conn: conn} do
     conn = get conn, post_path(conn, :index)
     assert json_response(conn, 200)["data"] == []
@@ -20,7 +44,7 @@ defmodule Ping.PostControllerTest do
     assert json_response(conn, 200)["data"] == %{"id" => post.id,
       "dream" => post.dream,
       "reality" => post.reality,
-      "process" => post.progress}
+      "progress" => post.progress}
   end
 
   test "renders page not found when id is nonexistent", %{conn: conn} do

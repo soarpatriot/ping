@@ -2,10 +2,21 @@ defmodule Ping.PostController do
   use Ping.Web, :controller
 
   alias Ping.Post
+  alias Ping.User
 
   def index(conn, _params) do
     posts = Repo.all(Post)
     render(conn, "index.json", posts: posts)
+  end
+
+  def page(conn,_params) do 
+ 
+    query = Post
+           |> limit(10) 
+           |> offset(0) 
+    posts = Repo.all(query)
+            |> Repo.preload(:user) 
+    render(conn, "posts-user.json", posts: posts)
   end
 
   def create(conn, post_params) do

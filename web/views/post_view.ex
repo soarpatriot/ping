@@ -13,6 +13,23 @@ defmodule Ping.PostView do
     %{id: post.id,
       dream: post.dream,
       reality: post.reality,
-      process: post.progress}
+      progress: post.progress}
+  end
+
+  def render("post-user.json", %{post: post}) do 
+    %{id: post.id,
+      dream: post.dream,
+      reality: post.reality,
+      progress: post.progress,
+      user_id: post.user.id,
+      gender: post.user.gender,
+      avatar_url: post.user.avatar_url,
+      nickname: post.user.nickname   
+    }
+    
+  end
+
+  def render("posts-user.json", %{posts: posts}) do 
+    %{data: render_many(posts, Ping.PostView, "post-user.json")}
   end
 end
