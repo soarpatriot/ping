@@ -11,7 +11,7 @@ defmodule Ping.PostControllerTest do
   end
   
   test "page the empty list ", %{conn: conn} do 
-    conn = get conn, post_path(conn, :page)
+    conn = get conn, post_path(conn, :index)
     assert json_response(conn, 200)["data"] == []
   end
   test "page the not empty list", %{conn: conn} do 
@@ -19,7 +19,7 @@ defmodule Ping.PostControllerTest do
     changeset = Post.changeset(%Post{}, @valid_attrs) 
                 |> Ecto.Changeset.put_change(:user_id, user.id)
     Repo.insert! changeset
-    conn = get conn, post_path(conn, :page)
+    conn = get conn, post_path(conn, :index)
     post = hd(json_response(conn,200)["data"])
     #IO.inspect  post
     assert  %{"id" => post["id"],

@@ -22,7 +22,6 @@ defmodule Ping.Router do
   # Other scopes may use custom stacks.
   scope "/", Ping do
     pipe_through :api
-    get "/posts/page", PostController, :page
     resources "/posts", PostController
     resources "/users", UserController 
     post "/users/me", UserController, :save_or_update

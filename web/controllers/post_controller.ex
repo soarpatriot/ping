@@ -4,20 +4,18 @@ defmodule Ping.PostController do
   alias Ping.Post
   alias Ping.User
 
-  def index(conn, _params) do
-    posts = Repo.all(Post)
-    render(conn, "index.json", posts: posts)
-  end
-
-  def page(conn,_params) do 
- 
+  def index(conn,  params) do
+    p = Map.get(params, "page", 1)
+    ps = Map.get(params, "page_size", 10)
     query = Post
-           |> limit(10) 
+           |> limit(^ps) 
            |> offset(0) 
     posts = Repo.all(query)
             |> Repo.preload(:user) 
     render(conn, "posts-user.json", posts: posts)
+ 
   end
+
 
   def create(conn, post_params) do
     changeset = Post.changeset(%Post{}, post_params)
