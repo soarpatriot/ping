@@ -2,14 +2,14 @@ defmodule Ping.PostController do
   use Ping.Web, :controller
 
   alias Ping.Post
-  alias Ping.User
 
   def index(conn,  params) do
     p = Map.get(params, "page", 1)
+    pg = p - 1
     ps = Map.get(params, "page_size", 10)
     query = Post
            |> limit(^ps) 
-           |> offset(0) 
+           |> offset(^pg) 
     posts = Repo.all(query)
             |> Repo.preload(:user) 
     render(conn, "posts-user.json", posts: posts)
@@ -34,8 +34,9 @@ defmodule Ping.PostController do
   end
 
   def show(conn, %{"id" => id}) do
-    post = Repo.get!(Post, id)
-    render(conn, "show.json", post: post)
+    post = Repo.get!(Post, id) 
+            |> Repo.preload(:user) 
+    render(conn, "show-user.json", post: post)
   end
 
   def update(conn, %{"id" => id, "post" => post_params}) do

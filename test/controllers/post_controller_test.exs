@@ -39,12 +39,22 @@ defmodule Ping.PostControllerTest do
   end
 
   test "shows chosen resource", %{conn: conn} do
-    post = Repo.insert! %Post{}
+    user =  Repo.insert! User.changeset(%User{}, %{nickname: "121", avatar_url: "http://www.a/b.jpg", openid: "12213"})
+    changeset = Post.changeset(%Post{}, @valid_attrs) 
+                |> Ecto.Changeset.put_change(:user_id, user.id)
+    post = Repo.insert! changeset
+ 
     conn = get conn, post_path(conn, :show, post)
     assert json_response(conn, 200)["data"] == %{"id" => post.id,
       "dream" => post.dream,
       "reality" => post.reality,
-      "progress" => post.progress}
+      "progress" => post.progress,
+      "user_id" => user.id,
+      "gender" => user.gender, 
+      "nickname" => user.nickname,
+      "avatar_url" => user.avatar_url
+    
+    }
   end
 
   test "renders page not found when id is nonexistent", %{conn: conn} do

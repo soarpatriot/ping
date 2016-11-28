@@ -8,6 +8,10 @@ defmodule Ping.PostView do
   def render("show.json", %{post: post}) do
     %{data: render_one(post, Ping.PostView, "post.json")}
   end
+  def render("show-user.json", %{post: post}) do
+    %{data: render_one(post, Ping.PostView, "post-user.json")}
+  end
+
 
   def render("post.json", %{post: post}) do
     %{id: post.id,
