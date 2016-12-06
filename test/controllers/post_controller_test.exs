@@ -3,7 +3,7 @@ defmodule Ping.PostControllerTest do
 
   alias Ping.Post
   alias Ping.User
-  @valid_attrs %{dream: "some content", progress: 42, reality: "some content", user_id: 1}
+  @valid_attrs %{dream: "some content", progress: 42, reality: "some content", user_id: 1, count: 3 }
   @invalid_attrs %{}
 
   setup %{conn: conn} do
@@ -49,6 +49,7 @@ defmodule Ping.PostControllerTest do
       "dream" => post.dream,
       "reality" => post.reality,
       "progress" => post.progress,
+      "count" => post.count,
       "user_id" => user.id,
       "gender" => user.gender, 
       "nickname" => user.nickname,

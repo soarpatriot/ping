@@ -5,6 +5,7 @@ defmodule Ping.Post do
     field :dream, :string
     field :reality, :string
     field :progress, :integer
+    field :count, :integer
     
     belongs_to :user, Ping.User
     timestamps()
@@ -17,7 +18,7 @@ defmodule Ping.Post do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:dream, :reality, :progress, :user_id])
+    |> cast(params, [:dream, :reality, :progress, :user_id, :count])
     |> validate_required([:dream, :reality, :progress, :user_id])
   end
 end
