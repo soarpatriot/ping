@@ -16,4 +16,11 @@ defmodule Ping.Favorite do
     |> cast(params, [:user_id, :post_id])
     |> validate_required([:user_id, :post_id])
   end
+
+  def exist(_user_id, _post_id) do 
+  #case Repo.find(Post,%{user_id: user_id, post_id: post_id}) do 
+  #    nil -> %Favorite{user_id: user_id, post_id: post_id}
+  #    favorite -> favorite
+  #  end
+  end
 end

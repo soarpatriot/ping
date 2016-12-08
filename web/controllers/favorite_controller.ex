@@ -2,6 +2,7 @@ defmodule Ping.FavoriteController do
   use Ping.Web, :controller
 
   alias Ping.Favorite
+  require IEx
 
   def index(conn, _params) do
     favorites = Repo.all(Favorite)
@@ -10,18 +11,40 @@ defmodule Ping.FavoriteController do
 
   def create(conn, %{"favorite" => favorite_params}) do
     changeset = Favorite.changeset(%Favorite{}, favorite_params)
-
-    case Repo.insert(changeset) do
-      {:ok, favorite} ->
+    #Favorite.exist()    
+    #changeset = Favorite.changeset(favorite, favorite_params)
+    case changeset.valid? do 
+      true ->
+        favorite = Repo.get_by(Favorite, 
+                           %{user_id: favorite_params["user_id"],
+                           post_id: favorite_params["post_id"]})
+        result = 
+          case favorite do 
+            nil ->  %Favorite{} 
+            favorite -> favorite 
+          end
+          |> Favorite.changeset(favorite_params)
+          |> Repo.insert_or_update
+     
+        #changeset = Favorite.changeset(favorite, favorite_params)
+        case result do
+          {:ok, favorite} ->
+            conn
+            |> put_status(:created)
+            |> put_resp_header("location", favorite_path(conn, :show, favorite))
+            |> render("show.json", favorite: favorite)
+          {:error, changeset} ->
+            conn
+            |> put_status(:unprocessable_entity)
+            |> render(Ping.ChangesetView, "error.json", changeset: changeset)
+        end
+      false -> 
         conn
-        |> put_status(:created)
-        |> put_resp_header("location", favorite_path(conn, :show, favorite))
-        |> render("show.json", favorite: favorite)
-      {:error, changeset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(Ping.ChangesetView, "error.json", changeset: changeset)
+         |> put_status(:unprocessable_entity)
+         |> render(Ping.ChangesetView, "error.json", changeset: changeset) 
+      
     end
+
   end
 
   def show(conn, %{"id" => id}) do
