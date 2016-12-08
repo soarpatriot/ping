@@ -4,7 +4,6 @@ defmodule Ping.Favorite do
   schema "favorites" do
     field :user_id, :integer
     field :post_id, :integer
-
     timestamps()
   end
 
@@ -13,7 +12,7 @@ defmodule Ping.Favorite do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:user_id, :post_id])
+    |> cast(params, [:user_id, :post_id ])
     |> validate_required([:user_id, :post_id])
   end
 

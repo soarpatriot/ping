@@ -2,7 +2,7 @@ defmodule Ping.FavoriteControllerTest do
   use Ping.ConnCase
 
   alias Ping.Favorite
-  @valid_attrs %{post_id: 42, user_id: 42}
+  @valid_attrs %{post_id: 42, user_id: 42 }
   @invalid_attrs %{}
 
   setup %{conn: conn} do
@@ -19,7 +19,7 @@ defmodule Ping.FavoriteControllerTest do
     conn = get conn, favorite_path(conn, :show, favorite)
     assert json_response(conn, 200)["data"] == %{"id" => favorite.id,
       "user_id" => favorite.user_id,
-      "post_id" => favorite.post_id}
+      "post_id" => favorite.post_id }
   end
 
   test "renders page not found when id is nonexistent", %{conn: conn} do
