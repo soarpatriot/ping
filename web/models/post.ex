@@ -1,13 +1,13 @@
 defmodule Ping.Post do
   use Ping.Web, :model
-
+  require IEx
   schema "posts" do
     field :dream, :string
     field :reality, :string
     field :progress, :integer
     field :count, :integer
      
-    field :favorited, :boolean, virtual: true
+    field :favorited, :boolean, virtual: true, default: false
 
     has_many   :favorites, Ping.Favorite 
     belongs_to :user, Ping.User
@@ -44,6 +44,14 @@ defmodule Ping.Post do
         #h = head |> Ecto.Changeset.change(%{favorited:  true } )
         h = Map.merge(head, %{favorited:  false } )
         [ h |  user_fav(tail) ]
+      nil -> 
+      #h = head |> Ecto.Changeset.change(%{favorited:  true } )
+        # h = head
+        # h.favorited = true
+        #h = head |> Ecto.Changeset.change(%{favorited:  true } )
+        h = Map.merge(head, %{favorited:  false } )
+        [ h |  user_fav(tail) ]
+ 
       _ -> 
       #h = head
       #  h.favorited = false

@@ -23,10 +23,10 @@ defmodule Ping.PostController do
         true -> 
            posts  
             |> Repo.preload(favorites: fav_query)
+            |> Post.user_fav
         false ->
           posts
       end
-      |> Post.user_fav
     render(conn, "posts-user.json", posts: result)
  
   end
