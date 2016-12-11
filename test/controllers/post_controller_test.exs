@@ -3,7 +3,8 @@ defmodule Ping.PostControllerTest do
 
   alias Ping.Post
   alias Ping.User
-  @valid_attrs %{dream: "some content", progress: 42, reality: "some content", user_id: 1, count: 3 }
+  alias Ping.Favorite
+  @valid_attrs %{dream: "some content", progress: 42, reality: "some content", user_id: 1, count: 3 , favorite: false}
   @invalid_attrs %{}
 
   setup %{conn: conn} do
@@ -53,10 +54,34 @@ defmodule Ping.PostControllerTest do
       "user_id" => user.id,
       "gender" => user.gender, 
       "nickname" => user.nickname,
-      "avatar_url" => user.avatar_url
-    
+      "avatar_url" => user.avatar_url,
+      "favorited" => nil 
     }
   end
+
+  test "list favorited chosen resource", %{conn: conn} do
+    user =  Repo.insert! User.changeset(%User{}, %{nickname: "121", avatar_url: "http://www.a/b.jpg", openid: "12213"})
+    changeset = Post.changeset(%Post{}, @valid_attrs) 
+                |> Ecto.Changeset.put_change(:user_id, user.id)
+    post = Repo.insert! changeset
+    
+    Favorite.changeset(%Favorite{}, %{user_id: user.id, post_id: post.id}) 
+    |> Repo.insert 
+    conn = get conn, post_path(conn, :index, %{user_id: user.id })
+    
+    assert hd(json_response(conn, 200)["data"]) == %{"id" => post.id,
+      "dream" => post.dream,
+      "reality" => post.reality,
+      "progress" => post.progress,
+      "count" => post.count,
+      "user_id" => user.id,
+      "gender" => user.gender, 
+      "nickname" => user.nickname,
+      "avatar_url" => user.avatar_url,
+      "favorited" => true 
+    }
+  end
+
 
   test "renders page not found when id is nonexistent", %{conn: conn} do
     assert_error_sent 404, fn ->

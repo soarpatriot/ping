@@ -6,7 +6,10 @@ defmodule Ping.Post do
     field :reality, :string
     field :progress, :integer
     field :count, :integer
-    
+     
+    field :favorited, :boolean, virtual: true
+
+    has_many   :favorites, Ping.Favorite 
     belongs_to :user, Ping.User
     timestamps()
   end
@@ -30,5 +33,27 @@ defmodule Ping.Post do
   def down(post) do 
     post 
     |> Ecto.Changeset.change(%{count:  post.count - 1 } )
+  end
+
+  def user_fav([ head | tail ] ) do 
+    case head.favorites do 
+      nil -> 
+      #h = head |> Ecto.Changeset.change(%{favorited:  true } )
+        # h = head
+        # h.favorited = true
+        #h = head |> Ecto.Changeset.change(%{favorited:  true } )
+        h = Map.merge(head, %{favorited:  false } )
+        [ h |  user_fav(tail) ]
+      _ -> 
+      #h = head
+      #  h.favorited = false
+      #h =head |> Ecto.Changeset.change(%{favorited:  false } )
+        h = Map.merge(head, %{favorited:  true } )
+        [ h |  user_fav(tail) ]
+    end
+  end
+
+  def user_fav([]) do 
+    []
   end
 end

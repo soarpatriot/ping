@@ -3,7 +3,9 @@ defmodule Ping.Favorite do
 
   schema "favorites" do
     field :user_id, :integer
-    field :post_id, :integer
+    # field :post_id, :integer
+
+    belongs_to :post, Ping.Post
     timestamps()
   end
 

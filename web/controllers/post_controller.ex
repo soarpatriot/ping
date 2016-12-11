@@ -2,17 +2,32 @@ defmodule Ping.PostController do
   use Ping.Web, :controller
 
   alias Ping.Post
+  alias Ping.Favorite
 
   def index(conn,  params) do
     p = Map.get(params, "page", 1)
     pg = p - 1
     ps = Map.get(params, "page_size", 10)
+    user_id = Map.get(params, "user_id", 0)
+
+    fav_query = from f in Favorite, where: f.user_id == ^user_id
     query = Post
            |> limit(^ps) 
            |> offset(^pg) 
+
     posts = Repo.all(query)
             |> Repo.preload(:user) 
-    render(conn, "posts-user.json", posts: posts)
+    
+    result = 
+      case user_id > 0 do 
+        true -> 
+           posts  
+            |> Repo.preload(favorites: fav_query)
+        false ->
+          posts
+      end
+      |> Post.user_fav
+    render(conn, "posts-user.json", posts: result)
  
   end
 

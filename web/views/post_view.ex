@@ -29,7 +29,8 @@ defmodule Ping.PostView do
       user_id: post.user.id,
       gender: post.user.gender,
       avatar_url: post.user.avatar_url,
-      nickname: post.user.nickname   
+      nickname: post.user.nickname,  
+      favorited: post.favorited
     }
     
   end
