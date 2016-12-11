@@ -82,6 +82,27 @@ defmodule Ping.PostControllerTest do
     }
   end
 
+  test "list unfavorited chosen resource", %{conn: conn} do
+    user =  Repo.insert! User.changeset(%User{}, %{nickname: "121", avatar_url: "http://www.a/b.jpg", openid: "12213"})
+    changeset = Post.changeset(%Post{}, @valid_attrs) 
+                |> Ecto.Changeset.put_change(:user_id, user.id)
+    post = Repo.insert! changeset
+    
+    conn = get conn, post_path(conn, :index, %{user_id: user.id })
+    
+    assert hd(json_response(conn, 200)["data"]) == %{"id" => post.id,
+      "dream" => post.dream,
+      "reality" => post.reality,
+      "progress" => post.progress,
+      "count" => post.count,
+      "user_id" => user.id,
+      "gender" => user.gender, 
+      "nickname" => user.nickname,
+      "avatar_url" => user.avatar_url,
+      "favorited" => false 
+    }
+  end
+
 
   test "renders page not found when id is nonexistent", %{conn: conn} do
     assert_error_sent 404, fn ->

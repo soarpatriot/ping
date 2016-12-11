@@ -37,7 +37,7 @@ defmodule Ping.Post do
 
   def user_fav([ head | tail ] ) do 
     case head.favorites do 
-      nil -> 
+      [] -> 
       #h = head |> Ecto.Changeset.change(%{favorited:  true } )
         # h = head
         # h.favorited = true
