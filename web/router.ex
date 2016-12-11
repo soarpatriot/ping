@@ -23,6 +23,7 @@ defmodule Ping.Router do
   scope "/", Ping do
     pipe_through :api
     resources "/favorites", FavoriteController, except: [:new, :edit]
+    post "/favorites/up", FavoriteController, :up
     resources "/posts", PostController
     resources "/users", UserController 
     post "/users/me", UserController, :save_or_update

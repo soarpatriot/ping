@@ -2,12 +2,63 @@ defmodule Ping.FavoriteController do
   use Ping.Web, :controller
 
   alias Ping.Favorite
+  alias Ping.Post
   require IEx
 
   def index(conn, _params) do
     favorites = Repo.all(Favorite)
     render(conn, "index.json", favorites: favorites)
   end
+  def up(conn, %{"favorite" => favorite_params}) do
+    changeset = Favorite.changeset(%Favorite{}, favorite_params)
+    #Favorite.exist()    
+    #changeset = Favorite.changeset(favorite, favorite_params)
+    case changeset.valid? do 
+      true ->
+        favorite = Repo.get_by(Favorite, 
+                           %{user_id: favorite_params["user_id"],
+                           post_id: favorite_params["post_id"]})
+        result = 
+          case favorite do 
+            nil ->  
+              %Favorite{} 
+              |>  Favorite.changeset(favorite_params)
+              |>  Repo.insert
+              
+              Repo.get(Post,favorite_params["post_id"]) 
+                |> Post.up  
+                |> Repo.update
+            favorite -> 
+              favorite 
+              |> Repo.delete  
+
+              Repo.get(Post,favorite_params["post_id"]) 
+                |> Post.down  
+                |> Repo.update
+ 
+          end
+     
+        #changeset = Favorite.changeset(favorite, favorite_params)
+        case result do
+          {:ok, post} ->
+            conn
+            |> put_status(:created)
+            # |> put_resp_header("location", favorite_path(conn, :show, post))
+            |> render("up.json", post: post)
+          {:error, changeset} ->
+            conn
+            |> put_status(:unprocessable_entity)
+            |> render(Ping.ChangesetView, "error.json", changeset: changeset)
+        end
+      false -> 
+        conn
+         |> put_status(:unprocessable_entity)
+         |> render(Ping.ChangesetView, "error.json", changeset: changeset) 
+      
+    end
+
+  end
+
 
   def create(conn, %{"favorite" => favorite_params}) do
     changeset = Favorite.changeset(%Favorite{}, favorite_params)

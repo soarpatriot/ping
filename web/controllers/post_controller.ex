@@ -62,4 +62,5 @@ defmodule Ping.PostController do
 
     send_resp(conn, :no_content, "")
   end
+
 end

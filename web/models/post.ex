@@ -21,4 +21,14 @@ defmodule Ping.Post do
     |> cast(params, [:dream, :reality, :progress, :user_id, :count])
     |> validate_required([:dream, :reality, :progress, :user_id])
   end
+
+  def up(post) do 
+    post 
+    |> Ecto.Changeset.change(%{count:  post.count + 1 } )
+  end
+
+  def down(post) do 
+    post 
+    |> Ecto.Changeset.change(%{count:  post.count - 1 } )
+  end
 end
