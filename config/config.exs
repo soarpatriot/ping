@@ -6,6 +6,7 @@
 use Mix.Config
 
 # General application configuration
+config :ping, Ping.Gettext, default_locale: "zh"
 config :ping,
   ecto_repos: [Ping.Repo]
 

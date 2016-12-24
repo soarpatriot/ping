@@ -55,7 +55,8 @@ defmodule Ping.PostControllerTest do
       "gender" => user.gender, 
       "nickname" => user.nickname,
       "avatar_url" => user.avatar_url,
-      "favorited" => false 
+      "favorited" => false,
+      "published_at" => Post.time_ago_unit(post)
     }
   end
 
@@ -78,7 +79,8 @@ defmodule Ping.PostControllerTest do
       "gender" => user.gender, 
       "nickname" => user.nickname,
       "avatar_url" => user.avatar_url,
-      "favorited" => true 
+      "favorited" => true,
+      "published_at" => Post.time_ago_unit(post)
     }
   end
 
@@ -99,7 +101,8 @@ defmodule Ping.PostControllerTest do
       "gender" => user.gender, 
       "nickname" => user.nickname,
       "avatar_url" => user.avatar_url,
-      "favorited" => false 
+      "favorited" => false,
+      "published_at" => Post.time_ago_unit(post)
     }
   end
   test "no user id params list unfavorited chosen resource", %{conn: conn} do
@@ -119,7 +122,8 @@ defmodule Ping.PostControllerTest do
       "gender" => user.gender, 
       "nickname" => user.nickname,
       "avatar_url" => user.avatar_url,
-      "favorited" => false
+      "favorited" => false,
+      "published_at" => Post.time_ago_unit(post)
     }
   end
 

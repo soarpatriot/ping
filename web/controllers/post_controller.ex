@@ -27,6 +27,7 @@ defmodule Ping.PostController do
         false ->
           posts
       end
+        |> Post.time_ago
     render(conn, "posts-user.json", posts: result)
  
   end
@@ -51,6 +52,7 @@ defmodule Ping.PostController do
   def show(conn, %{"id" => id}) do
     post = Repo.get!(Post, id) 
             |> Repo.preload(:user) 
+            |> Post.time_in
     render(conn, "show-user.json", post: post)
   end
 

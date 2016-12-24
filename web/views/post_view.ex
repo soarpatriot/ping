@@ -17,7 +17,9 @@ defmodule Ping.PostView do
     %{id: post.id,
       dream: post.dream,
       reality: post.reality,
-      progress: post.progress}
+      progress: post.progress,
+      published_at: post.published_at
+    }
   end
 
   def render("post-user.json", %{post: post}) do 
@@ -30,7 +32,8 @@ defmodule Ping.PostView do
       gender: post.user.gender,
       avatar_url: post.user.avatar_url,
       nickname: post.user.nickname,  
-      favorited: post.favorited
+      favorited: post.favorited,
+      published_at: post.published_at
     }
     
   end
