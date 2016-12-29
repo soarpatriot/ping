@@ -83,7 +83,7 @@ defmodule Ping.Post do
     Map.merge(head, %{published_at: i_at} )
   end
   def time_ago_unit(head) do 
-    i_at = Timex.from_now(head.inserted_at, "zh_CN") 
+    Timex.from_now(head.inserted_at, "zh_CN") 
     #Gettext.dgettext Ping.Gettext, "relative_time", i_at
     #Gettext.dgettext "zh", "relative_time", i_at, %{}
     #Timex.Translator.translate("zh","relative_time", i_at)

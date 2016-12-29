@@ -26,6 +26,7 @@ defmodule Ping.Router do
     post "/favorites/up", FavoriteController, :up
     resources "/posts", PostController
     resources "/users", UserController 
+    resources "/comments", CommentController 
     post "/users/me", UserController, :save_or_update
   end
 end
