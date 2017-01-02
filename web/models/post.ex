@@ -14,6 +14,7 @@ defmodule Ping.Post do
     field :favorited, :boolean, virtual: true, default: false
 
     has_many   :favorites, Ping.Favorite 
+    has_many   :comments, Ping.Comment
     belongs_to :user, Ping.User
     timestamps()
   end
@@ -96,4 +97,12 @@ defmodule Ping.Post do
       # end
     #i_at = Timex.shift(head.inserted_at, minutes: -1) |> Timex.format("{relative}", :relative)
   end
+  
+  def with_comments(query) do 
+    from q in query, preload: [comments: :user]
+  end
+  def with_user(query) do 
+    from q in query, preload: [:user]
+  end
+
 end

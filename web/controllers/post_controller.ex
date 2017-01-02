@@ -50,10 +50,15 @@ defmodule Ping.PostController do
   end
 
   def show(conn, %{"id" => id}) do
-    post = Repo.get!(Post, id) 
-            |> Repo.preload(:user) 
-            |> Post.time_in
-    render(conn, "show-user.json", post: post)
+    post  = Post 
+              |> Post.with_user
+              |> Post.with_comments
+              |> Repo.get!(id)
+              |> Post.time_in
+    #|> Repo.preload(comments: [:user])
+    #        |> Repo.preload(:user)
+
+    render(conn, "show-commented.json", post: post)
   end
 
   def update(conn, %{"id" => id, "post" => post_params}) do

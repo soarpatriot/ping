@@ -4,6 +4,7 @@ defmodule Ping.PostControllerTest do
   alias Ping.Post
   alias Ping.User
   alias Ping.Favorite
+  alias Ping.Comment
   @valid_attrs %{dream: "some content", progress: 42, reality: "some content", user_id: 1, count: 3 , favorite: false}
   @invalid_attrs %{}
 
@@ -44,9 +45,10 @@ defmodule Ping.PostControllerTest do
     changeset = Post.changeset(%Post{}, @valid_attrs) 
                 |> Ecto.Changeset.put_change(:user_id, user.id)
     post = Repo.insert! changeset
- 
+    comment = Repo.insert! Comment.changeset(%Comment{}, %{user_id: user.id, post_id: post.id, content: "11"})
     conn = get conn, post_path(conn, :show, post)
-    assert json_response(conn, 200)["data"] == %{"id" => post.id,
+
+    assert json_response(conn, 200) == %{"id" => post.id,
       "dream" => post.dream,
       "reality" => post.reality,
       "progress" => post.progress,
@@ -56,7 +58,16 @@ defmodule Ping.PostControllerTest do
       "nickname" => user.nickname,
       "avatar_url" => user.avatar_url,
       "favorited" => false,
-      "published_at" => Post.time_ago_unit(post)
+      "published_at" => Post.time_ago_unit(post),
+      "comments" => [%{
+        "id" => comment.id,
+        "post_id"=> post.id,
+        "user_id" => user.id,
+        "content" => comment.content,
+        "gender" => user.gender,
+        "nickname" => user.nickname,
+        "avatar_url" => user.avatar_url
+      }]
     }
   end
 
@@ -105,6 +116,7 @@ defmodule Ping.PostControllerTest do
       "published_at" => Post.time_ago_unit(post)
     }
   end
+
   test "no user id params list unfavorited chosen resource", %{conn: conn} do
     user =  Repo.insert! User.changeset(%User{}, %{nickname: "121", avatar_url: "http://www.a/b.jpg", openid: "12213"})
     changeset = Post.changeset(%Post{}, @valid_attrs) 

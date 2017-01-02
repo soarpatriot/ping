@@ -8,6 +8,7 @@ defmodule Ping.CommentController do
     render(conn, "index.json", comments: comments)
   end
 
+
   def create(conn, %{"comment" => comment_params}) do
     changeset = Comment.changeset(%Comment{}, comment_params)
 
