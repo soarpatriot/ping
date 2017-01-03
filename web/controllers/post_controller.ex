@@ -55,10 +55,13 @@ defmodule Ping.PostController do
               |> Post.with_comments
               |> Repo.get!(id)
               |> Post.time_in
+    comments = Post.time_ago(post.comments)
+
+    t_post = Map.merge(post, %{comments:  comments } )
     #|> Repo.preload(comments: [:user])
     #        |> Repo.preload(:user)
 
-    render(conn, "show-commented.json", post: post)
+    render(conn, "show-commented.json", post: t_post)
   end
 
   def update(conn, %{"id" => id, "post" => post_params}) do

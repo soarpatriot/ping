@@ -66,7 +66,8 @@ defmodule Ping.PostControllerTest do
         "content" => comment.content,
         "gender" => user.gender,
         "nickname" => user.nickname,
-        "avatar_url" => user.avatar_url
+        "avatar_url" => user.avatar_url,
+        "published_at" => Post.time_ago_unit(comment),
       }]
     }
   end

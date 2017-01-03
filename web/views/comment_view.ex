@@ -23,6 +23,7 @@ defmodule Ping.CommentView do
   def render("user-comment.json", %{comment: comment}) do 
     %{id: comment.id,
       content: comment.content,
+      published_at: comment.published_at,
       post_id: comment.post_id,
       user_id: comment.user.id,
       gender: comment.user.gender,

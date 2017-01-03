@@ -1,9 +1,11 @@
 defmodule Ping.Comment do
   use Ping.Web, :model
-
+  use Timex.Ecto.Timestamps
+  use Timex
+ 
   schema "comments" do
     field :content, :string
-
+    field :published_at, :string, virtual: true    
     belongs_to :user, Ping.User
     belongs_to :post, Ping.Post
     timestamps()
