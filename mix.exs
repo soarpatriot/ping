@@ -41,7 +41,6 @@ defmodule Ping.Mixfile do
      {:phoenix_html, "~> 2.6"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.11"},
-     {:kerosene, "~> 0.5.0"},
      {:scrivener_ecto, "~> 1.0"},
      {:cowboy, "~> 1.0"}]
   end
