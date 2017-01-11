@@ -29,13 +29,14 @@ defmodule Ping.Web do
   def controller do
     quote do
       use Phoenix.Controller
-
+     
       alias Ping.Repo
       import Ecto
       import Ecto.Query
 
       import Ping.Router.Helpers
       import Ping.Gettext
+      # alias Ping.Paginator
     end
   end
 

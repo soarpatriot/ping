@@ -10,25 +10,30 @@ defmodule Ping.PostController do
     ps = Map.get(params, "page_size", 10)
     user_id = Map.get(params, "user_id", 0)
 
+    # pagination = %{page: p, page_size: ps} 
     fav_query = from f in Favorite, where: f.user_id == ^user_id
-    query = Post
-           |> limit(^ps) 
-           |> offset(^pg) 
+    #query = Post
+    #       |> limit(^ps) 
+    #       |> offset(^pg) 
 
-    posts = Repo.all(query)
-            |> Repo.preload(:user) 
-    
+    #posts = Paginator.new(Post, params)
+    {posts, kerosene } = Post
+            |> Repo.paginate(params)
     result = 
       case user_id > 0 do 
         true -> 
            posts  
+            |> Repo.preload(:user) 
             |> Repo.preload(favorites: fav_query)
             |> Post.user_fav
         false ->
           posts
+            |> Repo.preload(:user) 
+            
       end
         |> Post.time_ago
-    render(conn, "posts-user.json", posts: result)
+    # p_result = %{posts: result, pagination: pagination}
+    render(conn, "posts-user.json", posts: result, kerosene: kerosene)
  
   end
 

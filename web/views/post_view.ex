@@ -1,5 +1,6 @@
 defmodule Ping.PostView do
   use Ping.Web, :view
+  import Kerosene.JSON
 
   def render("index.json", %{posts: posts}) do
     %{data: render_many(posts, Ping.PostView, "post.json")}
@@ -58,7 +59,9 @@ defmodule Ping.PostView do
   #  %{render_many(posts, Ping.PostView, "comment.json")}
   #end
 
-  def render("posts-user.json", %{posts: posts}) do 
-    %{data: render_many(posts, Ping.PostView, "post-user.json")}
+  def render("posts-user.json", %{posts: posts, kerosene: kerosene, conn: conn}) do
+    %{data: render_many(posts, Ping.PostView, "post-user.json"),
+      pagination: paginate(conn, kerosene)
+      }
   end
 end
