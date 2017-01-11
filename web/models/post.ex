@@ -1,7 +1,7 @@
 defmodule Ping.Post do
   use Ping.Web, :model
   use Timex.Ecto.Timestamps
-  use Kerosene, per_page: 2
+  # use Kerosene, per_page: 2
   use Timex
   use Gettext, otp_app: :ping
   require IEx
