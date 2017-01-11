@@ -17,8 +17,16 @@ defmodule Ping.PostController do
     #       |> offset(^pg) 
 
     #posts = Paginator.new(Post, params)
-    {posts, kerosene } = Post
+    #{posts, kerosene } = Post
+    page = Post
             |> Repo.paginate(params)
+    posts = page.entries
+    pagination = %{
+      page_number: page.page_number,
+      page_size: page.page_size,
+      total_pages: page.total_pages,
+      total_entries: page.total_entries
+    }
     result = 
       case user_id > 0 do 
         true -> 
@@ -33,7 +41,7 @@ defmodule Ping.PostController do
       end
         |> Post.time_ago
     # p_result = %{posts: result, pagination: pagination}
-    render(conn, "posts-user.json", posts: result, kerosene: kerosene)
+    render(conn, "posts-user.json", posts: result, pagination: pagination)
  
   end
 
