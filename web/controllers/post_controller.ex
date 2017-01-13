@@ -3,10 +3,10 @@ defmodule Ping.PostController do
 
   alias Ping.Post
   alias Ping.Favorite
-
+  require IEx
   def index(conn,  params) do
-    p = Map.get(params, "page", 1)
-    pg = p - 1
+    #p = Map.get(params, "page_number")
+    # pg = p - 1
     ps = Map.get(params, "page_size", 10)
     user_id = Map.get(params, "user_id", 0)
 
@@ -20,6 +20,7 @@ defmodule Ping.PostController do
     #{posts, kerosene } = Post
     page = Post
             |> Repo.paginate(params)
+    IEx.pry
     posts = page.entries
     pagination = %{
       page_number: page.page_number,
