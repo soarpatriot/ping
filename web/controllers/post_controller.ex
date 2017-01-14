@@ -20,7 +20,6 @@ defmodule Ping.PostController do
     #{posts, kerosene } = Post
     page = Post
             |> Repo.paginate(params)
-    IEx.pry
     posts = page.entries
     pagination = %{
       page_number: page.page_number,
