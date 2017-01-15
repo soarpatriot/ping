@@ -19,7 +19,7 @@ defmodule Ping.Mixfile do
   def application do
     [mod: {Ping, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :timex, :timex_ecto, :scrivener_ecto]]
+                    :phoenix_ecto, :postgrex, :timex, :timex_ecto, :scrivener_ecto, :ex_machina]]
   end
 
   # Specifies which paths to compile per environment.
@@ -42,6 +42,7 @@ defmodule Ping.Mixfile do
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.11"},
      {:scrivener_ecto, "~> 1.1.1"},
+     {:ex_machina, "~> 1.0", only: :test},
      {:cowboy, "~> 1.0"}]
   end
 

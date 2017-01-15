@@ -45,6 +45,31 @@ defmodule Ping.PostController do
  
   end
 
+  def my(conn,  params) do
+    user_id = params["user_id"]
+
+    # pagination = %{page: p, page_size: ps} 
+    query = from p in Post, where: p.user_id == ^user_id
+    fav_query = from f in Favorite, where: f.user_id == ^user_id
+    posts = Repo.all(query)
+    result = 
+      case user_id > 0 do 
+        true -> 
+           posts  
+            |> Repo.preload(:user) 
+            |> Repo.preload(favorites: fav_query)
+            |> Post.user_fav
+        false ->
+          posts
+            |> Repo.preload(:user) 
+            
+      end
+        |> Post.time_ago
+    # p_result = %{posts: result, pagination: pagination}
+    render(conn, "my-posts.json", posts: result) 
+ 
+  end
+
 
   def create(conn, post_params) do
     changeset = Post.changeset(%Post{}, post_params)

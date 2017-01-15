@@ -5,6 +5,8 @@ defmodule Ping.PostControllerTest do
   alias Ping.User
   alias Ping.Favorite
   alias Ping.Comment
+  
+  import Ping.Factory
   @valid_attrs %{dream: "some content", progress: 42, reality: "some content", user_id: 1, count: 3 , favorite: false}
   @invalid_attrs %{}
 
@@ -178,4 +180,14 @@ defmodule Ping.PostControllerTest do
     assert response(conn, 204)
     refute Repo.get(Post, post.id)
   end
+
+  test "my posts list", %{conn: conn} do
+    user = insert(:user)
+    user2 = insert(:user)
+    insert_list(10, :post, user: user2)
+    insert_list(10, :post, user: user)
+    conn = get conn, post_path(conn, :my, %{user_id: user.id })
+    posts = json_response(conn, 200)["data"]
+    assert length(posts) == 10 
+  end 
 end

@@ -64,4 +64,8 @@ defmodule Ping.PostView do
       pagination: pagination
       }
   end
+  def render("my-posts.json", %{posts: posts}) do
+    %{data: render_many(posts, Ping.PostView, "post-user.json")}
+  end
+
 end
