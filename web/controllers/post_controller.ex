@@ -7,18 +7,19 @@ defmodule Ping.PostController do
   def index(conn,  params) do
     #p = Map.get(params, "page_number")
     # pg = p - 1
-    ps = Map.get(params, "page_size", 10)
+    # ps = Map.get(params, "page_size", 10)
     user_id = Map.get(params, "user_id", 0)
 
     # pagination = %{page: p, page_size: ps} 
-    fav_query = from f in Favorite, where: f.user_id == ^user_id
+    fav_query = from f in Favorite, where: f.user_id == ^user_id 
     #query = Post
     #       |> limit(^ps) 
     #       |> offset(^pg) 
 
     #posts = Paginator.new(Post, params)
     #{posts, kerosene } = Post
-    page = Post
+    page = Post 
+            |> order_by([p], desc: p.id)
             |> Repo.paginate(params)
     posts = page.entries
     pagination = %{
@@ -49,7 +50,7 @@ defmodule Ping.PostController do
     user_id = params["user_id"]
 
     # pagination = %{page: p, page_size: ps} 
-    query = from p in Post, where: p.user_id == ^user_id
+    query = from p in Post, where: p.user_id == ^user_id, order_by: [desc: p.id]
     fav_query = from f in Favorite, where: f.user_id == ^user_id
     posts = Repo.all(query)
     result = 

@@ -1,5 +1,5 @@
 defmodule Ping.Paginator do  
-
+  alias Ping.Repo
   use Ping.Web, :model
   defstruct [:entries, :page_number, :page_size, :total_pages]
 
@@ -33,7 +33,7 @@ defmodule Ping.Paginator do
     query
     |> limit([_], ^page_size)
     |> offset([_], ^offset)
-    # |> Repo.all
+    |> Repo.all
   end
 
   defp to_int(i) when is_integer(i), do: i
