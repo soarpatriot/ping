@@ -97,7 +97,7 @@ namespace :deploy do
   end
   task :upload do
     invoke "docker:upload_compose_compile"
-    #invoke "docker:upload_compose"
+    invoke "docker:upload_compose"
     invoke "docker:upload_web"
   end
   before :cleanup, :change_right
