@@ -44,10 +44,7 @@ set :compile_commands, "cd current\
         && MIX_ENV=#{fetch(:mix_env)} mix local.rebar --force\
         && MIX_ENV=#{fetch(:mix_env)} mix hex.repo set hexpm --url https://hexpm.upyun.com\
         && MIX_ENV=#{fetch(:mix_env)} mix deps.get --only prod\
-        && npm install\
-        && ./node_modules/brunch/bin/brunch build --production\
-        && MIX_ENV=#{fetch(:mix_env)} mix ecto.create && MIX_ENV=#{fetch(:mix_env)} mix ecto.migrate\
-        && MIX_ENV=#{fetch(:mix_env)} mix phoenix.digest"
+        && MIX_ENV=#{fetch(:mix_env)} mix ecto.create && MIX_ENV=#{fetch(:mix_env)} mix ecto.migrate"
 
 set :commands, "cd current\
         && MIX_ENV=#{fetch(:mix_env)} iex -S mix phoenix.server"
