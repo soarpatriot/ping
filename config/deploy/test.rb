@@ -3,6 +3,7 @@ set :server_name, "10.3.22.60"
 set :branch, "master"
 set :deploy_to, "/data/www/ping"
 set :mix_env, 'prod'
+set :user, 'soar'
 server fetch(:server_name), user: "soar", roles: %w{web app db}
 
 

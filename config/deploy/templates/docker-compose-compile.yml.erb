@@ -2,14 +2,14 @@ version: '3'
 services:
 
   compile:
-    build: ./docker/web
-    image: soar/vr:1.0.4
+    build: ./docker/ping
+    image: soar/ping:1.0.0
     container_name: ping_compile
     network_mode: "bridge"
     volumes:
       - <%= fetch(:user_home) %>/.hex:/root/.hex
       - <%= fetch(:user_home) %>/.mix:/root/.mix
-      - <%= fetch(:deploy_to) %>:/data/www/vr
+      - <%= fetch(:deploy_to) %>:/data/www/ping
     external_links:
       - postgres:db
     command: bash -c "<%= fetch(:compile_commands) %>"

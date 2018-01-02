@@ -39,8 +39,8 @@ set :mix_env, 'prod'
 set :keep_releases, 5
 # set :phoenix_mix_env -> 'prod' #default fetch(:mix_env)
  #&& MIX_ENV=#{fetch(:mix_env)} mix phoenix.digest && MIX_ENV=#{fetch(:mix_env)} mix ompile && MIX_ENV=#{fetch(:mix_env)} mix release"
-set :compile_commands, "cd current\
-        && MIX_ENV=#{fetch(:mix_env)} mix local.hex --force\
+set :compile_commands, "
+        MIX_ENV=#{fetch(:mix_env)} mix local.hex --force\
         && MIX_ENV=#{fetch(:mix_env)} mix local.rebar --force\
         && MIX_ENV=#{fetch(:mix_env)} mix hex.repo set hexpm --url https://hexpm.upyun.com\
         && MIX_ENV=#{fetch(:mix_env)} mix deps.get --only prod\
