@@ -34,7 +34,7 @@ defmodule Ping.Mixfile do
      {:phoenix_pubsub, "~> 1.0"},
      {:phoenix_ecto, "~> 3.0"},
      {:postgrex, ">= 0.0.0"},
-     {:exrm, "~> 1.0"},
+     {:exrm, "~> 1.0.8"},
      {:timex, "~> 3.1.24"},
      # {:timex, git: "git@github.com:soarpatriot/timex.git", override: true},
      {:timex_ecto, "~> 3.0"},
