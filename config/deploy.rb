@@ -21,47 +21,92 @@ set :scm, :git
 # set :format_options, command_output: true, log_file: 'log/capistrano.log', color: :auto, truncate: :auto
 
 # Default value for :pty is false
-# set :pty, true
+set :pty, true
 
 # Default value for :linked_files is []
 set :linked_files, fetch(:linked_files, []).push('config/prod.secret.exs','config/prod.exs')
 
 # Default value for linked_dirs is []
+# rel _build
 set :linked_dirs, fetch(:linked_dirs, [])
-  .push('deps', 'node_modules', 'rel', '_build', 'priv/static', 'log')
+  .push('deps', 'node_modules', 'log', '_build')
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
 # Default value for keep_releases is 5
+set :mix_env, 'prod'
 set :keep_releases, 5
 # set :phoenix_mix_env -> 'prod' #default fetch(:mix_env)
+ #&& MIX_ENV=#{fetch(:mix_env)} mix phoenix.digest && MIX_ENV=#{fetch(:mix_env)} mix ompile && MIX_ENV=#{fetch(:mix_env)} mix release"
+set :compile_commands, "cd current\
+        && MIX_ENV=#{fetch(:mix_env)} mix local.hex --force\
+        && MIX_ENV=#{fetch(:mix_env)} mix local.rebar --force\
+        && MIX_ENV=#{fetch(:mix_env)} mix hex.repo set hexpm --url https://hexpm.upyun.com\
+        && MIX_ENV=#{fetch(:mix_env)} mix deps.get --only prod\
+        && npm install\
+        && ./node_modules/brunch/bin/brunch build --production\
+        && MIX_ENV=#{fetch(:mix_env)} mix ecto.create && MIX_ENV=#{fetch(:mix_env)} mix ecto.migrate\
+        && MIX_ENV=#{fetch(:mix_env)} mix phoenix.digest"
+
+set :commands, "cd current\
+        && MIX_ENV=#{fetch(:mix_env)} iex -S mix phoenix.server"
 namespace :deploy do
-  def is_application_running?()
-    pid = capture(%Q{ps ax -o pid= -o command=|grep "rel/#{fetch(:application)}/.*/[b]eam"|awk '{print $1}'})
-    return pid != ""
-  end
   task :build do
     on roles(:all), in: :sequence do
-      within release_path  do
-        execute :mix, "deps.get && MIX_ENV=#{fetch(:mix_env)} mix ecto.migrate && MIX_ENV=#{fetch(:mix_env)} mix compile  && MIX_ENV=#{fetch(:mix_env)} mix release"
+      within current_path  do
+        execute :"docker", "container prune -f"
+        execute :"docker-compose", "-f docker-compose-compile.yml up"
       end
     end
   end
- 
+
   desc 'restart phoenix app'
   task :restart do
+    invoke 'deploy:stop'
+    invoke 'deploy:start'
+  end
+  task :start do
     on roles(:all), in: :sequence do
       within current_path  do
-
-        if is_application_running?
-          execute "rel/#{fetch(:application)}/bin/#{fetch(:application)}", "stop"
-        end
-        execute "rel/#{fetch(:application)}/bin/#{fetch(:application)}", "start -detached"
+        #exist = capture("docker ps -a  | grep web")
+        #puts "a is #{exist}"
+        execute :"docker", "container prune -f"
+        #if exist.empty?
+        execute :"docker-compose", "up -d"
+        #else
+        #  execute :"docker-compose", "restart -t 30 web"
+        #end
       end
     end
-  end
-  after :publishing, "build"
-  after :published, "restart"
-end
 
+  end
+  task :stop do
+  end
+  task :compose_down do
+    on roles(:all), in: :sequence do
+      within current_path  do
+        execute :"docker-compose", "down"
+        info "The applicaton is shutting down!"
+        #execute :"sleep","20"
+      end
+    end
+
+  end
+  task :change_right do
+    on roles(:all), in: :sequence do
+      execute :echo, "start && sudo chown -R #{fetch(:user)} #{fetch(:deploy_to)}"
+    end
+  end
+  task :upload do
+    invoke "docker:upload_compose_compile"
+    #invoke "docker:upload_compose"
+    invoke "docker:upload_web"
+  end
+  before :cleanup, :change_right
+  #before :check, "docker:upload_compose"
+  #before :publishing, "deploy:compose_down"
+  after :published, :upload
+  before :finished, :change_right
+  after :finished, :build
+end
