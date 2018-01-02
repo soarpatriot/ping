@@ -35,6 +35,6 @@
   "scrivener": {:hex, :scrivener, "2.2.1", "5a84cdfc042e3c318a03f965d8197b8294676a8fff7c4a29e482a90c467ebf19", [:mix], []},
   "scrivener_ecto": {:hex, :scrivener_ecto, "1.1.1", "971974be1406d513bf202240cf2e778def9c8d4030de08945a6ede3c6d457fd3", [:mix], [{:ecto, "~> 2.0", [hex: :ecto, optional: false]}, {:postgrex, "~> 0.11.0 or ~> 0.12.0 or ~> 0.13.0", [hex: :postgrex, optional: true]}, {:scrivener, "~> 2.0", [hex: :scrivener, optional: false]}]},
   "ssl_verify_fun": {:hex, :ssl_verify_fun, "1.1.1", "28a4d65b7f59893bc2c7de786dec1e1555bd742d336043fe644ae956c3497fbe", [:make, :rebar], []},
-  "timex": {:git, "git@github.com:soarpatriot/timex.git", "7f27efbe4ba31814217ab4b7f47e225e3525e228", []},
+  "timex": {:hex, :timex, "3.1.24", "d198ae9783ac807721cca0c5535384ebdf99da4976be8cefb9665a9262a1e9e3", [:mix], [{:combine, "~> 0.7", [hex: :combine, repo: "hexpm", optional: false]}, {:gettext, "~> 0.10", [hex: :gettext, repo: "hexpm", optional: false]}, {:tzdata, "~> 0.1.8 or ~> 0.5", [hex: :tzdata, repo: "hexpm", optional: false]}], "hexpm"},
   "timex_ecto": {:hex, :timex_ecto, "3.0.5", "3ec6c25e10d2c0020958e5df64d2b5e690e441faa2c2259da8bc6bd3d7f39256", [:mix], [{:ecto, "~> 2.0", [hex: :ecto, optional: false]}, {:timex, "~> 3.0", [hex: :timex, optional: false]}]},
   "tzdata": {:hex, :tzdata, "0.5.10", "087e8dfe8c0283473115ad8ca6974b898ecb55ca5c725427a142a79593391e90", [:mix], [{:hackney, "~> 1.0", [hex: :hackney, optional: false]}]}}
