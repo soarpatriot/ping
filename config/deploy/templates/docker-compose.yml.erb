@@ -1,0 +1,17 @@
+version: '3'
+services:
+  ping:
+    build: ./docker/ping
+    image: soar/ping:1.0.1
+    container_name: ping
+    network_mode: "bridge"
+    volumes:
+      - <%= fetch(:user_home) %>/.hex:/root/.hex
+      - <%= fetch(:user_home) %>/.mix:/root/.mix
+      - <%= fetch(:deploy_to) %>:/data/www/ping
+    command: bash -c "<%= fetch(:commands) %>"
+    #"npm install && mix deps.get && mix ecto.create && mix ecto.migrate && iex -S mix phoenix.server"
+    ports:
+      - 5000:4000
+    external_links:
+      - postgres:db
