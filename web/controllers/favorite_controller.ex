@@ -27,14 +27,12 @@ defmodule Ping.FavoriteController do
               
               Repo.get(Post,favorite_params["post_id"]) 
                 |> Post.up  
-                |> Repo.update
             favorite -> 
               favorite 
               |> Repo.delete  
 
               Repo.get(Post,favorite_params["post_id"]) 
                 |> Post.down  
-                |> Repo.update
  
           end
      
