@@ -64,37 +64,22 @@ defmodule Ping.FavoriteController do
     changeset = Favorite.changeset(%Favorite{}, favorite_params)
     #Favorite.exist()    
     #changeset = Favorite.changeset(favorite, favorite_params)
-    case changeset.valid? do 
-      true ->
-        favorite = Repo.get_by(Favorite, 
-                           %{user_id: favorite_params["user_id"],
-                           post_id: favorite_params["post_id"]})
-        result = 
-          case favorite do 
-            nil ->  %Favorite{} 
-            favorite -> favorite 
-          end
-          |> Favorite.changeset(favorite_params)
-          |> Repo.insert_or_update
-     
-        #changeset = Favorite.changeset(favorite, favorite_params)
-        case result do
-          {:ok, favorite} ->
-            conn
-            |> put_status(:created)
-            |> put_resp_header("location", favorite_path(conn, :show, favorite))
-            |> render("show.json", favorite: favorite)
-          {:error, changeset} ->
-            conn
-            |> put_status(:unprocessable_entity)
-            |> render(Ping.ChangesetView, "error.json", changeset: changeset)
-        end
-      false -> 
+    #
+    case Repo.insert(changeset) do
+      {:ok, favorite} ->
+        Repo.get(Post,favorite.post_id) 
+          |> Post.up  
+ 
         conn
-         |> put_status(:unprocessable_entity)
-         |> render(Ping.ChangesetView, "error.json", changeset: changeset) 
-      
+        |> put_status(:created)
+        |> put_resp_header("location", comment_path(conn, :show, favorite))
+        |> render("show.json", favorite: favorite)
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(Ping.ChangesetView, "error.json", changeset: changeset)
     end
+
 
   end
 
@@ -119,7 +104,14 @@ defmodule Ping.FavoriteController do
 
   def delete(conn, %{"id" => id}) do
     favorite = Repo.get!(Favorite, id)
-
+    case favorite.post_id do 
+      nil -> nil
+      _ -> 
+        post = Repo.get(Post,favorite.post_id) 
+        post = Repo.get(Post,favorite.post_id) 
+        post  |> Post.down 
+    end
+ 
     # Here we use delete! (with a bang) because we expect
     # it to always work (and if it does not, it will raise).
     Repo.delete!(favorite)

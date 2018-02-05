@@ -7,7 +7,8 @@ defmodule Ping.PostControllerTest do
   alias Ping.Comment
   
   import Ping.Factory
-  @valid_attrs %{dream: "some content", progress: 42, reality: "some content", user_id: 1, count: 3 , favorite: false}
+  # @valid_attrs %{dream: "some content", progress: 42, reality: "some content", user_id: 1, count: 3 , favorite: false}
+  @valid_attrs %{dream: "some content", user_id: 1, count: 3 , favorite: false}
   @invalid_attrs %{}
 
   setup %{conn: conn} do
@@ -153,7 +154,7 @@ defmodule Ping.PostControllerTest do
   test "creates and renders resource when data is valid", %{conn: conn} do
     conn = post conn, post_path(conn, :create), @valid_attrs
     assert json_response(conn, 201)["data"]["id"]
-    assert Repo.get_by(Post, progress: @valid_attrs.progress)
+    assert Repo.get_by(Post, dream: @valid_attrs.dream)
   end
 
   test "does not create resource and renders errors when data is invalid", %{conn: conn} do
@@ -165,7 +166,7 @@ defmodule Ping.PostControllerTest do
     post = Repo.insert! %Post{}
     conn = put conn, post_path(conn, :update, post), post: @valid_attrs
     assert json_response(conn, 200)["data"]["id"]
-    assert Repo.get_by(Post, progress: @valid_attrs.progress)
+    assert Repo.get_by(Post, dream: @valid_attrs.dream)
   end
 
   test "does not update chosen resource and renders errors when data is invalid", %{conn: conn} do

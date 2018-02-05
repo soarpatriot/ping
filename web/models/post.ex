@@ -5,6 +5,8 @@ defmodule Ping.Post do
   use Timex
   use Gettext, otp_app: :ping
   require IEx
+  alias Ping.Repo
+
   schema "posts" do
     field :dream, :string
     field :reality, :string
@@ -32,13 +34,26 @@ defmodule Ping.Post do
   end
 
   def up(post) do 
-    post 
-    |> Ecto.Changeset.change(%{count:  post.count + 1 } )
+    case post do 
+      nil -> 
+        IO.puts "post is nil!"
+      _ -> 
+        post 
+        |> Ecto.Changeset.change(%{count:  post.count + 1 } )
+        |> Repo.update
+    end
   end
 
   def down(post) do 
-    post 
-    |> Ecto.Changeset.change(%{count:  post.count - 1 } )
+    case post do 
+      nil -> 
+        IO.puts "post is nil!"
+      _ -> 
+        post 
+        |> Ecto.Changeset.change(%{count:  post.count - 1 } )
+        |> Repo.update
+   
+    end
   end
 
   def user_fav([ head | tail ] ) do 
