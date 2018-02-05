@@ -28,7 +28,7 @@ defmodule Ping.Post do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:dream, :reality, :progress, :user_id, :count])
-    |> validate_required([:dream, :reality, :progress, :user_id])
+    |> validate_required([:dream, :user_id])
   end
 
   def up(post) do 
