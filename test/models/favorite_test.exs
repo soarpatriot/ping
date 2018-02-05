@@ -1,6 +1,8 @@
 defmodule Ping.FavoriteTest do
   use Ping.ModelCase
-
+  alias Ping.Favorite
+  import Ping.Factory
+ 
   alias Ping.Favorite
 
   @valid_attrs %{post_id: 42, user_id: 42}
@@ -15,4 +17,11 @@ defmodule Ping.FavoriteTest do
     changeset = Favorite.changeset(%Favorite{}, @invalid_attrs)
     refute changeset.valid?
   end
+  test "exist_fav" do
+    post = insert(:post)
+    user = insert(:user)
+    favorite = insert(:favorite)
+    p = Favorite.exist_fav(post, user.id)
+  end
+
 end

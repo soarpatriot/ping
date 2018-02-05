@@ -88,12 +88,13 @@ defmodule Ping.PostController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
+  def show(conn, %{"id" => id, "user_id" => user_id}) do
     post  = Post 
               |> Post.with_user
               |> Post.with_comments
               |> Repo.get!(id)
               |> Post.time_in
+              |> Favorite.exist_fav(user_id)
     comments = Post.time_ago(post.comments)
 
     t_post = Map.merge(post, %{comments:  comments } )

@@ -19,5 +19,12 @@ defmodule Ping.Factory do
       user: build(:user),
     }
   end
+  def favorite_factory do
+    %Ping.Favorite{
+      post: build(:post),
+      user: build(:user)
+    }
+  end
+
 
 end

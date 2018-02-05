@@ -23,6 +23,15 @@ defmodule Ping.FavoriteView do
     %{id: post.id,
       count: post.count }
   end
+  def render("favorite-post.json", %{favorite: favorite}) do
+    %{id: favorite.id,
+      user_id: favorite.user_id,
+      post_id: favorite.post_id,
+      post: render_one(favorite.post, Ping.PostView, "post.json")
+    }
+ 
+  end
+
 
   def render("favorite.json", %{favorite: favorite}) do
     %{id: favorite.id,

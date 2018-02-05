@@ -48,8 +48,9 @@ defmodule Ping.PostControllerTest do
     changeset = Post.changeset(%Post{}, @valid_attrs) 
                 |> Ecto.Changeset.put_change(:user_id, user.id)
     post = Repo.insert! changeset
+    insert(:favorite, user: user, post: post)
     comment = Repo.insert! Comment.changeset(%Comment{}, %{user_id: user.id, post_id: post.id, content: "11"})
-    conn = get conn, post_path(conn, :show, post)
+    conn = get conn, post_path(conn, :show, post), user_id: user.id
 
     assert json_response(conn, 200) == %{"id" => post.id,
       "dream" => post.dream,
@@ -60,7 +61,7 @@ defmodule Ping.PostControllerTest do
       "gender" => user.gender, 
       "nickname" => user.nickname,
       "avatar_url" => user.avatar_url,
-      "favorited" => false,
+      "favorited" => true,
       "published_at" => Post.time_ago_unit(post),
       "comments" => [%{
         "id" => comment.id,
@@ -147,7 +148,7 @@ defmodule Ping.PostControllerTest do
 
   test "renders page not found when id is nonexistent", %{conn: conn} do
     assert_error_sent 404, fn ->
-      get conn, post_path(conn, :show, -1)
+      get conn, post_path(conn, :show, -1), user_id: 2
     end
   end
 

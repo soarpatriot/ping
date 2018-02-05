@@ -69,10 +69,11 @@ defmodule Ping.FavoriteController do
       {:ok, favorite} ->
         Repo.get(Post,favorite.post_id) 
           |> Post.up  
- 
+        f_with_post = favorite
+            |> Repo.preload(:post) 
         conn
         |> put_status(:created)
-        |> put_resp_header("location", comment_path(conn, :show, favorite))
+        |> put_resp_header("location", comment_path(conn, :show, f_with_post))
         |> render("show.json", favorite: favorite)
       {:error, changeset} ->
         conn
@@ -108,7 +109,6 @@ defmodule Ping.FavoriteController do
       nil -> nil
       _ -> 
         post = Repo.get(Post,favorite.post_id) 
-        post = Repo.get(Post,favorite.post_id) 
         post  |> Post.down 
     end
  
@@ -116,6 +116,7 @@ defmodule Ping.FavoriteController do
     # it to always work (and if it does not, it will raise).
     Repo.delete!(favorite)
 
+    #render(conn,Ping.PostView, "post.json", post: post)
     send_resp(conn, :no_content, "")
   end
 end
