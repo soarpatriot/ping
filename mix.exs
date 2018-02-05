@@ -43,6 +43,7 @@ defmodule Ping.Mixfile do
      {:gettext, "~> 0.11"},
      {:scrivener_ecto, "~> 1.1.1"},
      {:ex_machina, "~> 1.0"},
+     {:logger_file_backend, "~> 0.0.10"},
      {:cowboy, "~> 1.0"}]
   end
 
