@@ -17,3 +17,5 @@ config :ping, Ping.Repo,
   database: "ping_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+import_config "test.secret.exs"

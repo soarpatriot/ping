@@ -56,6 +56,7 @@ defmodule Ping.Post do
     end
   end
 
+  
   def user_fav([ head | tail ] ) do 
     case head.favorites do 
       [] -> 

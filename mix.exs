@@ -18,7 +18,7 @@ defmodule Ping.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Ping, []},
-     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
+     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,:qiniu,
                     :phoenix_ecto, :postgrex, :timex, :timex_ecto, :scrivener_ecto, :ex_machina]]
   end
 
@@ -37,6 +37,7 @@ defmodule Ping.Mixfile do
      {:exrm, "~> 1.0.8"},
      {:timex, "~> 3.1.24"},
      # {:timex, git: "git@github.com:soarpatriot/timex.git", override: true},
+     {:qiniu, "~> 0.4.0"},
      {:timex_ecto, "~> 3.0"},
      {:phoenix_html, "~> 2.6"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},

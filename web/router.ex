@@ -25,6 +25,7 @@ defmodule Ping.Router do
     resources "/favorites", FavoriteController, except: [:new, :edit]
     post "/favorites/up", FavoriteController, :up
     get "/posts/my", PostController, :my
+    get "/tokens/qiniu", TokenController, :qiniu
     resources "/posts", PostController
     resources "/users", UserController 
     resources "/comments", CommentController 
