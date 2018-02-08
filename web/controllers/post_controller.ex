@@ -52,8 +52,7 @@ defmodule Ping.PostController do
     # pagination = %{page: p, page_size: ps} 
     query = from p in Post, where: p.user_id == ^user_id, order_by: [desc: p.id]
     fav_query = from f in Favorite, where: f.user_id == ^user_id
-    page = Post 
-            |> order_by([p], desc: p.id)
+    page = query
             |> Repo.paginate(params)
     posts = page.entries
     pagination = %{
