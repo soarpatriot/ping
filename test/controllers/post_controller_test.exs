@@ -190,6 +190,6 @@ defmodule Ping.PostControllerTest do
     insert_list(10, :post, user: user)
     conn = get conn, post_path(conn, :my, %{user_id: user.id })
     posts = json_response(conn, 200)["data"]
-    assert length(posts) == 10 
+    assert length(posts) == 2 
   end 
 end

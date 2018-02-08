@@ -52,7 +52,16 @@ defmodule Ping.PostController do
     # pagination = %{page: p, page_size: ps} 
     query = from p in Post, where: p.user_id == ^user_id, order_by: [desc: p.id]
     fav_query = from f in Favorite, where: f.user_id == ^user_id
-    posts = Repo.all(query)
+    page = Post 
+            |> order_by([p], desc: p.id)
+            |> Repo.paginate(params)
+    posts = page.entries
+    pagination = %{
+      page_number: page.page_number,
+      page_size: page.page_size,
+      total_pages: page.total_pages,
+      total_entries: page.total_entries
+    }
     result = 
       case user_id > 0 do 
         true -> 
@@ -67,8 +76,8 @@ defmodule Ping.PostController do
       end
         |> Post.time_ago
     # p_result = %{posts: result, pagination: pagination}
-    render(conn, "my-posts.json", posts: result) 
- 
+    render(conn, "posts-user.json", posts: result, pagination: pagination)
+
   end
 
 
