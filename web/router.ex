@@ -26,6 +26,7 @@ defmodule Ping.Router do
     post "/favorites/up", FavoriteController, :up
     get "/posts/my", PostController, :my
     get "/tokens/qiniu", TokenController, :qiniu
+    get "/wechat/openid", WechatController, :openid
     resources "/posts", PostController
     resources "/users", UserController 
     resources "/comments", CommentController 
