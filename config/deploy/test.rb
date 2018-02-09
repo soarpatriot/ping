@@ -1,5 +1,5 @@
 set :stage, :production
-set :server_name, "10.3.22.60"
+set :server_name, "47.52.174.229"
 set :branch, "master"
 set :deploy_to, "/data/www/ping"
 set :mix_env, 'prod'
