@@ -7,14 +7,7 @@ defmodule Ping.PostController do
   require IEx
   def index(conn,  params) do
     user_id = Map.get(params, "user_id", 0)
-    # pagination = %{page: p, page_size: ps} 
     fav_query = from f in Favorite, where: f.user_id == ^user_id 
-    #query = Post
-    #       |> limit(^ps) 
-    #       |> offset(^pg) 
-
-    #posts = Paginator.new(Post, params)
-    #{posts, kerosene } = Post
     page = Post 
             |> order_by([p], desc: p.id)
             |> Repo.paginate(params)
@@ -25,21 +18,19 @@ defmodule Ping.PostController do
       total_pages: page.total_pages,
       total_entries: page.total_entries
     }
+    ass_posts = posts  
+      |> Repo.preload(:user) 
+      |> Repo.preload(:images) 
+      |> Post.time_ago
     result = 
       case user_id > 0 do 
         true -> 
-           posts  
-            |> Repo.preload(:user) 
-            |> Repo.preload(:images) 
+          ass_posts
             |> Repo.preload(favorites: fav_query)
             |> Post.user_fav
         false ->
-          posts
-            |> Repo.preload(:user) 
-            |> Repo.preload(:images) 
-            
+          ass_posts 
       end
-        |> Post.time_ago
     # p_result = %{posts: result, pagination: pagination}
     render(conn, "posts-user.json", posts: result, pagination: pagination)
  
@@ -60,21 +51,20 @@ defmodule Ping.PostController do
       total_pages: page.total_pages,
       total_entries: page.total_entries
     }
+    
+    ass_posts = posts  
+      |> Repo.preload(:user) 
+      |> Repo.preload(:images) 
+      |> Post.time_ago
     result = 
       case user_id > 0 do 
         true -> 
-           posts  
-            |> Repo.preload(:user) 
-            |> Repo.preload(:images) 
+          ass_posts
             |> Repo.preload(favorites: fav_query)
             |> Post.user_fav
         false ->
-          posts
-            |> Repo.preload(:images) 
-            |> Repo.preload(:user) 
-            
+          ass_posts 
       end
-        |> Post.time_ago
     # p_result = %{posts: result, pagination: pagination}
     render(conn, "posts-user.json", posts: result, pagination: pagination)
 
