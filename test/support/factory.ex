@@ -27,5 +27,15 @@ defmodule Ping.Factory do
     }
   end
 
+  def image_factory do
+    %Ping.Image{
+      post: build(:post),
+      key: "324",
+      hash: "hash",
+      url: "url"
+    }
+  end
+
+
 
 end

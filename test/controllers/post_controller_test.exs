@@ -42,6 +42,32 @@ defmodule Ping.PostControllerTest do
        }
 
   end
+  test "list with images", %{conn: conn} do 
+    user =  Repo.insert! User.changeset(%User{}, %{nickname: "121", avatar_url: "http://www.a/b.jpg", openid: "12213"})
+    changeset = Post.changeset(%Post{}, @valid_attrs) 
+                |> Ecto.Changeset.put_change(:user_id, user.id)
+    post = Repo.insert! changeset
+    image = insert(:image, post: post)
+    conn = get conn, post_path(conn, :index)
+    post = hd(json_response(conn,200)["data"])
+    #IO.inspect  post
+    assert  %{"id" => post["id"],
+      "dream" => post["dream"],
+      "reality" => post["reality"],
+      "progress" => post["progress"],
+      "user_id" => user.id,
+      "nickname" => user.nickname,
+      "avatar_url" => user.avatar_url,
+      "images" => [
+        %{"id" => image.id,
+          "key" => image.key,
+          "hash" => image.hash,
+          "url" => image.url
+        }
+       ]
+       }
+
+  end
  
   test "lists all entries on index", %{conn: conn} do
     conn = get conn, post_path(conn, :index)
