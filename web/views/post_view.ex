@@ -51,6 +51,7 @@ defmodule Ping.PostView do
       nickname: post.user.nickname,  
       favorited: post.favorited,
       published_at: post.published_at,
+      images: render_many(post.images, Ping.ImageView, "image.json"),
       comments: render_many(post.comments, Ping.CommentView, "user-comment.json")
     }
     

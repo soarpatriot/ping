@@ -105,6 +105,7 @@ defmodule Ping.PostController do
     post  = Post 
               |> Post.with_user
               |> Post.with_comments
+              |> Post.with_images
               |> Repo.get!(id)
               |> Post.time_in
               |> Favorite.exist_fav(user_id)

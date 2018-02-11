@@ -122,5 +122,8 @@ defmodule Ping.Post do
   def with_user(query) do 
     from q in query, preload: [:user]
   end
-
+  def with_images(query) do 
+    from q in query, preload: [:images]
+  end
+ 
 end

@@ -72,6 +72,49 @@ defmodule Ping.PostControllerTest do
     conn = get conn, post_path(conn, :index)
     assert json_response(conn, 200)["data"] == []
   end
+  test "shows with comment and images chosen resource", %{conn: conn} do
+    user =  Repo.insert! User.changeset(%User{}, %{nickname: "121", avatar_url: "http://www.a/b.jpg", openid: "12213"})
+    changeset = Post.changeset(%Post{}, @valid_attrs) 
+                |> Ecto.Changeset.put_change(:user_id, user.id)
+    post = Repo.insert! changeset
+    image = insert(:image, post: post)
+    insert(:favorite, user: user, post: post)
+    comment = Repo.insert! Comment.changeset(%Comment{}, %{user_id: user.id, post_id: post.id, content: "11"})
+    conn = get conn, post_path(conn, :show, post), user_id: user.id
+
+    assert json_response(conn, 200) == %{"id" => post.id,
+      "dream" => post.dream,
+      "reality" => post.reality,
+      "progress" => post.progress,
+      "count" => post.count,
+      "user_id" => user.id,
+      "gender" => user.gender, 
+      "nickname" => user.nickname,
+      "avatar_url" => user.avatar_url,
+      "favorited" => true,
+      "published_at" => Post.time_ago_unit(post),
+
+      "images" => [%{
+        "id" => image.id,
+        "hash"=> image.hash,
+        "key" => image.key,
+        "url" => image.url,
+        "post_id" => image.post_id
+ 
+      }],
+      "comments" => [%{
+        "id" => comment.id,
+        "post_id"=> post.id,
+        "user_id" => user.id,
+        "content" => comment.content,
+        "gender" => user.gender,
+        "nickname" => user.nickname,
+        "avatar_url" => user.avatar_url,
+        "published_at" => Post.time_ago_unit(comment),
+      }]
+    }
+  end
+
 
   test "shows chosen resource", %{conn: conn} do
     user =  Repo.insert! User.changeset(%User{}, %{nickname: "121", avatar_url: "http://www.a/b.jpg", openid: "12213"})
@@ -93,6 +136,7 @@ defmodule Ping.PostControllerTest do
       "avatar_url" => user.avatar_url,
       "favorited" => true,
       "published_at" => Post.time_ago_unit(post),
+      "images" => [],
       "comments" => [%{
         "id" => comment.id,
         "post_id"=> post.id,
