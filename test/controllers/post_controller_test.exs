@@ -101,7 +101,8 @@ defmodule Ping.PostControllerTest do
       "nickname" => user.nickname,
       "avatar_url" => user.avatar_url,
       "favorited" => true,
-      "published_at" => Post.time_ago_unit(post)
+      "published_at" => Post.time_ago_unit(post),
+      "images" => []
     }
   end
 
@@ -123,7 +124,8 @@ defmodule Ping.PostControllerTest do
       "nickname" => user.nickname,
       "avatar_url" => user.avatar_url,
       "favorited" => false,
-      "published_at" => Post.time_ago_unit(post)
+      "published_at" => Post.time_ago_unit(post),
+      "images" => []
     }
   end
 
@@ -145,7 +147,8 @@ defmodule Ping.PostControllerTest do
       "nickname" => user.nickname,
       "avatar_url" => user.avatar_url,
       "favorited" => false,
-      "published_at" => Post.time_ago_unit(post)
+      "published_at" => Post.time_ago_unit(post),
+      "images" => []
     }
   end
 

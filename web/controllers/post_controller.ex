@@ -6,11 +6,7 @@ defmodule Ping.PostController do
   alias Ping.Favorite
   require IEx
   def index(conn,  params) do
-    #p = Map.get(params, "page_number")
-    # pg = p - 1
-    # ps = Map.get(params, "page_size", 10)
     user_id = Map.get(params, "user_id", 0)
-
     # pagination = %{page: p, page_size: ps} 
     fav_query = from f in Favorite, where: f.user_id == ^user_id 
     #query = Post
@@ -34,11 +30,13 @@ defmodule Ping.PostController do
         true -> 
            posts  
             |> Repo.preload(:user) 
+            |> Repo.preload(:images) 
             |> Repo.preload(favorites: fav_query)
             |> Post.user_fav
         false ->
           posts
             |> Repo.preload(:user) 
+            |> Repo.preload(:images) 
             
       end
         |> Post.time_ago
@@ -67,10 +65,12 @@ defmodule Ping.PostController do
         true -> 
            posts  
             |> Repo.preload(:user) 
+            |> Repo.preload(:images) 
             |> Repo.preload(favorites: fav_query)
             |> Post.user_fav
         false ->
           posts
+            |> Repo.preload(:images) 
             |> Repo.preload(:user) 
             
       end

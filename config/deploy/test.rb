@@ -1,6 +1,6 @@
 set :stage, :production
 set :server_name, "47.52.174.229"
-set :branch, "master"
+set :branch, "dev"
 set :deploy_to, "/data/www/ping"
 set :mix_env, 'prod'
 set :user, 'soar'

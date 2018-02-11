@@ -34,7 +34,8 @@ defmodule Ping.PostView do
       avatar_url: post.user.avatar_url,
       nickname: post.user.nickname,  
       favorited: post.favorited,
-      published_at: post.published_at
+      published_at: post.published_at,
+      images: render_many(post.images, Ping.ImageView, "index.json")
     }
     
   end
