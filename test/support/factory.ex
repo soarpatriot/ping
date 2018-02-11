@@ -16,6 +16,7 @@ defmodule Ping.Factory do
       dream: "dream",
       reality: "reality",
       progress: 80,
+      count: 0,
       user: build(:user),
     }
   end

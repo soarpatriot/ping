@@ -2,6 +2,7 @@ defmodule Ping.PostControllerTest do
   use Ping.ConnCase
 
   alias Ping.Post
+  alias Ping.Image
   alias Ping.User
   alias Ping.Favorite
   alias Ping.Comment
@@ -9,6 +10,10 @@ defmodule Ping.PostControllerTest do
   import Ping.Factory
   # @valid_attrs %{dream: "some content", progress: 42, reality: "some content", user_id: 1, count: 3 , favorite: false}
   @valid_attrs %{dream: "some content", user_id: 1, count: 3 , favorite: false}
+  @valid_attrs_with_images %{dream: "some content", user_id: 1, count: 3 , favorite: false, images: [
+    %{key: "1", url: "https://sss.com", hash: "fffff"},
+    %{key: "2", url: "https://sssadf.com", hash: "ffffffljlfff"}
+  ]}
   @invalid_attrs %{}
 
   setup %{conn: conn} do
@@ -157,6 +162,14 @@ defmodule Ping.PostControllerTest do
     assert json_response(conn, 201)["data"]["id"]
     assert Repo.get_by(Post, dream: @valid_attrs.dream)
   end
+  test "creates with images and renders resource when data is valid", %{conn: conn} do
+    conn = post conn, post_path(conn, :create), @valid_attrs_with_images
+    assert json_response(conn, 201)["data"]["id"]
+    assert Repo.get_by(Post, dream: @valid_attrs.dream)
+    assert Repo.get_by(Image, key: "1")
+    assert Repo.get_by(Image, key: "2")
+  end
+
 
   test "does not create resource and renders errors when data is invalid", %{conn: conn} do
     conn = post conn, post_path(conn, :create), post: @invalid_attrs
@@ -186,10 +199,10 @@ defmodule Ping.PostControllerTest do
   test "my posts list", %{conn: conn} do
     user = insert(:user)
     user2 = insert(:user)
-    insert_list(10, :post, user: user2)
-    insert_list(10, :post, user: user)
+    insert_list(12, :post, user: user2)
+    insert_list(12, :post, user: user)
     conn = get conn, post_path(conn, :my, %{user_id: user.id })
     posts = json_response(conn, 200)["data"]
-    assert length(posts) == 2 
+    assert length(posts) == 10 
   end 
 end

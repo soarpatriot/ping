@@ -18,6 +18,7 @@ defmodule Ping.Post do
 
     has_many   :favorites, Ping.Favorite 
     has_many   :comments, Ping.Comment
+    has_many   :images, Ping.Image
     belongs_to :user, Ping.User
     timestamps()
   end

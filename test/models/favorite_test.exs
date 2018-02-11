@@ -20,8 +20,9 @@ defmodule Ping.FavoriteTest do
   test "exist_fav" do
     post = insert(:post)
     user = insert(:user)
-    favorite = insert(:favorite)
+    insert(:favorite, post: post, user: user)
     p = Favorite.exist_fav(post, user.id)
+    assert p.favorited === true
   end
 
 end

@@ -27,6 +27,7 @@ defmodule Ping.Router do
     get "/posts/my", PostController, :my
     get "/tokens/qiniu", TokenController, :qiniu
     get "/wechat/openid", WechatController, :openid
+    resources "/images", ImageController, except: [:new, :edit]
     resources "/posts", PostController
     resources "/users", UserController 
     resources "/comments", CommentController 

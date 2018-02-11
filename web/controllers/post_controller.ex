@@ -2,6 +2,7 @@ defmodule Ping.PostController do
   use Ping.Web, :controller
 
   alias Ping.Post
+  alias Ping.Image
   alias Ping.Favorite
   require IEx
   def index(conn,  params) do
@@ -81,7 +82,21 @@ defmodule Ping.PostController do
 
 
   def create(conn, post_params) do
-    changeset = Post.changeset(%Post{}, post_params)
+
+    # if images exist, save images
+    im_params = post_params["images"] 
+    images =  
+      case is_nil(im_params) do 
+        false -> 
+          Enum.map(im_params, fn(im) -> 
+                Image.changeset(%Image{}, im)
+                   end)
+        true ->  
+          []
+    end
+    post = Post.changeset(%Post{}, post_params)
+    changeset = Ecto.Changeset.put_assoc(post, :images, images)
+    # changeset = Post.changeset(%Post{}, post_params)
 
     case Repo.insert(changeset) do
       {:ok, post} ->

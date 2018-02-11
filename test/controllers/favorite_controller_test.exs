@@ -6,7 +6,7 @@ defmodule Ping.FavoriteControllerTest do
   import Ping.Factory
   require IEx
   @valid_attrs %{post_id: 42, user_id: 42 }
-  @valid_post_attrs %{dream: "some content", progress: 42, reality: "some content", user_id: 42, count: 3 }
+  # @valid_post_attrs %{dream: "some content", progress: 42, reality: "some content", user_id: 42, count: 3 }
   @invalid_attrs %{}
 
   setup %{conn: conn} do
@@ -85,27 +85,42 @@ defmodule Ping.FavoriteControllerTest do
 
 
   test "up with up action", %{conn: conn} do 
-    changeset = Post.changeset(%Post{}, @valid_post_attrs) 
-    post = Repo.insert! changeset
-    ch = Map.merge(@valid_attrs, %{post_id: post.id})
- 
-    # conn = post conn, favorite_path(conn, :up), favorite: ch
-    # assert json_response(conn, 201)["data"] == %{"post_id" => post.id,
-     #  "count" => post.count + 1 }
+    #changeset = Post.changeset(%Post{}, @valid_post_attrs) 
+
+    #  post = Repo.insert! changeset
+    #  ch = Map.merge(@valid_attrs, %{post_id: post.id})
+    user = insert(:user) 
+    post = insert(:post) 
+    count = post.count + 1
+    ch = %{user_id: user.id, post_id: post.id}
+    conn = post conn, favorite_path(conn, :up), favorite: ch
+    assert json_response(conn, 201)["data"] == %{"post_id" => post.id,
+      "count" => count }
 
     # assert Repo.get_by(Favorite, @valid_attrs)
     
   end 
   test "up with down action", %{conn: conn} do 
-    changeset = Post.changeset(%Post{}, @valid_post_attrs) 
-    post = Repo.insert! changeset
-    ch = Map.merge(@valid_attrs, %{post_id: post.id})
-    fav_changeset = Favorite.changeset(%Favorite{}, ch)     
-    # Repo.insert! fav_changeset
-    # conn = post conn, favorite_path(conn, :up), favorite: ch
-    # assert json_response(conn, 201)["data"] == %{"post_id" => post.id,
-     #  "count" => post.count - 1 }
+    user = insert(:user) 
+    post = insert(:post) 
+    count = post.count 
 
-    
+    ch = %{user_id: user.id, post_id: post.id}
+    ch2 = %{user_id: 23423423, post_id: post.id}
+    conn = post conn, favorite_path(conn, :up), favorite: ch
+    assert json_response(conn, 201)["data"] == %{"post_id" => post.id,
+      "count" => count + 1 }
+
+    conn = post conn, favorite_path(conn, :up), favorite: ch2
+    assert json_response(conn, 201)["data"] == %{"post_id" => post.id,
+      "count" => count + 2}
+
+
+    conn = post conn, favorite_path(conn, :up), favorite: ch
+    assert json_response(conn, 201)["data"] == %{"post_id" => post.id,
+      "count" => count + 1}
+
+
+   
   end 
 end

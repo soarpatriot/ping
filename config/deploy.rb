@@ -19,6 +19,7 @@ set :scm, :git
 # You can configure the Airbrussh format using :format_options.
 # These are the defaults.
 # set :format_options, command_output: true, log_file: 'log/capistrano.log', color: :auto, truncate: :auto
+set :ssh_options, { :forward_agent => true }
 
 # Default value for :pty is false
 set :pty, true
@@ -60,8 +61,14 @@ namespace :deploy do
 
   desc 'restart phoenix app'
   task :restart do
-    invoke 'deploy:stop'
-    invoke 'deploy:start'
+    on roles(:all), in: :sequence do
+      within current_path  do
+        execute :"docker", "restart ping"
+      end
+    end
+ 
+    #invoke 'deploy:stop'
+    #invoke 'deploy:start'
   end
   task :start do
     on roles(:all), in: :sequence do
