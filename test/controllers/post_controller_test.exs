@@ -47,10 +47,9 @@ defmodule Ping.PostControllerTest do
     changeset = Post.changeset(%Post{}, @valid_attrs) 
                 |> Ecto.Changeset.put_change(:user_id, user.id)
     post = Repo.insert! changeset
-    image = insert(:image, post: post)
+    insert(:image, post: post)
     conn = get conn, post_path(conn, :index)
     post = hd(json_response(conn,200)["data"])
-    #IO.inspect  post
     assert  %{"id" => post["id"],
       "dream" => post["dream"],
       "reality" => post["reality"],
@@ -59,10 +58,10 @@ defmodule Ping.PostControllerTest do
       "nickname" => user.nickname,
       "avatar_url" => user.avatar_url,
       "images" => [
-        %{"id" => image.id,
-          "key" => image.key,
-          "hash" => image.hash,
-          "url" => image.url
+        %{"id" => hd(post["images"])["id"],
+          "key" => hd(post["images"])["key"],
+          "hash" => hd(post["images"])["hash"],
+          "url" => hd(post["images"])["url"]
         }
        ]
        }
