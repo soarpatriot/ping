@@ -16,9 +16,9 @@ defmodule Ping.Post do
     field :published_at, :string, virtual: true    
     field :favorited, :boolean, virtual: true, default: false
 
-    has_many   :favorites, Ping.Favorite 
-    has_many   :comments, Ping.Comment
-    has_many   :images, Ping.Image
+    has_many   :favorites, Ping.Favorite, on_delete: :delete_all
+    has_many   :comments, Ping.Comment, on_delete: :delete_all
+    has_many   :images, Ping.Image, on_delete: :delete_all
     belongs_to :user, Ping.User
     timestamps()
   end
