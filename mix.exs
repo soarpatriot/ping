@@ -18,8 +18,9 @@ defmodule Ping.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Ping, []},
-     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,:qiniu,
-                    :phoenix_ecto, :postgrex, :timex, :timex_ecto, :scrivener_ecto, :ex_machina]]
+     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, 
+                    :gettext,:qiniu,:tzdata,
+                    :phoenix_ecto, :postgrex, :timex_ecto, :scrivener_ecto, :ex_machina]]
   end
 
   # Specifies which paths to compile per environment.

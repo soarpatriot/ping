@@ -24,6 +24,7 @@ defmodule Ping.Router do
     pipe_through :api
     resources "/favorites", FavoriteController, except: [:new, :edit]
     post "/favorites/up", FavoriteController, :up
+    get "/posts/migration", PostController, :m_comments
     get "/posts/my", PostController, :my
     get "/tokens/qiniu", TokenController, :qiniu
     get "/wechat/openid", WechatController, :openid

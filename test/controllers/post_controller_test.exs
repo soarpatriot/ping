@@ -277,4 +277,16 @@ defmodule Ping.PostControllerTest do
     posts = json_response(conn, 200)["data"]
     assert length(posts) == 10 
   end 
+
+  test "migration comments count", %{conn: conn} do 
+    post = insert(:post, dream: "35345")
+    insert(:comment, content: "123", post: post)
+    # posts = Ping.Repo.all(Ping.Post) |> Ping.Repo.preload(:comments)
+    assert post.comments_count === 0
+    get conn, post_path(conn, :m_comments)
+    # Post.update_comments_count(posts)
+    p = Ping.Repo.get(Post, post.id)
+    assert p.comments_count === 1
+  end
+
 end

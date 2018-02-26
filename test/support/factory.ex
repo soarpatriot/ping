@@ -36,6 +36,13 @@ defmodule Ping.Factory do
     }
   end
 
+  def comment_factory do
+    %Ping.Comment{
+      post: build(:post),
+      content: "sdfasd"
+    }
+  end
+
 
 
 end

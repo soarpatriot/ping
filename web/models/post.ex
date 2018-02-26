@@ -12,6 +12,7 @@ defmodule Ping.Post do
     field :reality, :string
     field :progress, :integer
     field :count, :integer
+    field :comments_count, :integer, default: 0
     
     field :published_at, :string, virtual: true    
     field :favorited, :boolean, virtual: true, default: false
@@ -126,4 +127,19 @@ defmodule Ping.Post do
     from q in query, preload: [:images]
   end
  
+  def update_comments_count([]) do
+    []
+  end
+  def update_comments_count([head | tail]) do
+    comments_count = length(head.comments) 
+    h = Ecto.Changeset.change(head, %{comments_count: comments_count})
+      |> Ping.Repo.update
+
+    [h | update_comments_count(tail) ]
+  end
+
+  def migrate_comments_data() do 
+    posts = Ping.Repo.all(Ping.Post) |> Ping.Repo.preload(:comments)
+            |> Ping.Post.update_comments_count
+  end
 end

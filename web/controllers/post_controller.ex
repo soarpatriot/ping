@@ -141,5 +141,9 @@ defmodule Ping.PostController do
 
     send_resp(conn, :no_content, "")
   end
-
+  
+  def m_comments(conn, _params) do 
+    Post.migrate_comments_data()    
+    send_resp(conn, :no_content, "")
+  end 
 end
