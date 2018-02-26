@@ -1,7 +1,9 @@
 defmodule Ping.CommentControllerTest do
   use Ping.ConnCase
 
+  alias Ping.Post
   alias Ping.Comment
+  import Ping.Factory
   @valid_attrs %{content: "some content", post_id: 42, user_id: 42}
   @invalid_attrs %{}
 
@@ -30,9 +32,12 @@ defmodule Ping.CommentControllerTest do
   end
 
   test "creates and renders resource when data is valid", %{conn: conn} do
-    conn = post conn, comment_path(conn, :create), comment: @valid_attrs
+    post = insert(:post, dream: "adfadsf")
+    attrs = %{@valid_attrs | post_id: post.id}
+    conn = post conn, comment_path(conn, :create), comment: attrs
     assert json_response(conn, 201)["data"]["id"]
-    assert Repo.get_by(Comment, @valid_attrs)
+    assert Repo.get(Post, post.id).comments_count === 1
+    assert Repo.get_by(Comment, attrs)
   end
 
   test "does not create resource and renders errors when data is invalid", %{conn: conn} do

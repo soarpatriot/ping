@@ -58,7 +58,14 @@ defmodule Ping.Post do
     end
   end
 
-  
+  def up_comments(post_id) do 
+    post = Repo.get(Ping.Post, post_id) 
+    post
+      |> Ecto.Changeset.change(%{comments_count:  post.comments_count + 1 } )
+      |> Repo.update
+ 
+  end  
+
   def user_fav([ head | tail ] ) do 
     case head.favorites do 
       [] -> 

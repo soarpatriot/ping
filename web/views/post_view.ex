@@ -19,6 +19,7 @@ defmodule Ping.PostView do
       dream: post.dream,
       reality: post.reality,
       progress: post.progress,
+      comments_count: post.comments_count,
       published_at: post.published_at
     }
   end
@@ -29,6 +30,7 @@ defmodule Ping.PostView do
       reality: post.reality,
       progress: post.progress,
       count: post.count,
+      comments_count: post.comments_count,
       user_id: post.user.id,
       gender: post.user.gender,
       avatar_url: post.user.avatar_url,
@@ -45,6 +47,7 @@ defmodule Ping.PostView do
       reality: post.reality,
       progress: post.progress,
       count: post.count,
+      comments_count: post.comments_count,
       user_id: post.user.id,
       gender: post.user.gender,
       avatar_url: post.user.avatar_url,

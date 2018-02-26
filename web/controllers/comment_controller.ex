@@ -2,6 +2,7 @@ defmodule Ping.CommentController do
   use Ping.Web, :controller
 
   alias Ping.Comment
+  alias Ping.Post
 
   def index(conn, _params) do
     comments = Repo.all(Comment)
@@ -14,6 +15,7 @@ defmodule Ping.CommentController do
 
     case Repo.insert(changeset) do
       {:ok, comment} ->
+        Post.up_comments(comment_params["post_id"])
         conn
         |> put_status(:created)
         |> put_resp_header("location", comment_path(conn, :show, comment))

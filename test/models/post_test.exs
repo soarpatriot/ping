@@ -27,4 +27,14 @@ defmodule Ping.PostTest do
     p = Ping.Repo.get(Post, post.id)
     assert p.comments_count === 1
   end
+  test "up comments count" do 
+    post = insert(:post, dream: "35345")
+    insert(:comment, content: "123", post: post)
+    # posts = Ping.Repo.all(Ping.Post) |> Ping.Repo.preload(:comments)
+    Post.up_comments(post.id)
+    # Post.update_comments_count(posts)
+    p = Ping.Repo.get(Post, post.id)
+    assert p.comments_count === 1
+  end
+
 end
