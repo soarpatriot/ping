@@ -11,8 +11,9 @@ defmodule Ping.Post do
     field :dream, :string
     field :reality, :string
     field :progress, :integer
-    field :count, :integer
+    field :count, :integer, default: 0
     field :comments_count, :integer, default: 0
+    field :forward_count, :integer, default: 0
     
     field :published_at, :string, virtual: true    
     field :favorited, :boolean, virtual: true, default: false
