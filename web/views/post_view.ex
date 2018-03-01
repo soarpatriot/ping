@@ -50,6 +50,7 @@ defmodule Ping.PostView do
       progress: post.progress,
       count: post.count,
       comments_count: post.comments_count,
+      forward_count: post.forward_count,
       user_id: post.user.id,
       gender: post.user.gender,
       avatar_url: post.user.avatar_url,
