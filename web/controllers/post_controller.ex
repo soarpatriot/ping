@@ -7,10 +7,20 @@ defmodule Ping.PostController do
   require IEx
   def index(conn,  params) do
     user_id = Map.get(params, "user_id", 0)
+    board_id = Map.get(params, "board_id", 0)
     fav_query = from f in Favorite, where: f.user_id == ^user_id 
-    page = Post 
-            |> order_by([p], desc: p.id)
-            |> Repo.paginate(params)
+    page = case board_id === 0 do 
+            true -> 
+               Post 
+                  |> order_by([p], desc: p.id)
+                  |> Repo.paginate(params)
+            false -> 
+              Post 
+                |> where([p], p.board_id == ^board_id)
+                |> order_by([p], desc: p.id)
+                |> Repo.paginate(params)
+          end
+
     posts = page.entries
     pagination = %{
       page_number: page.page_number,

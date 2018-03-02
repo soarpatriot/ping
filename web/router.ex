@@ -32,6 +32,7 @@ defmodule Ping.Router do
     resources "/posts", PostController
     resources "/users", UserController 
     resources "/comments", CommentController 
+    resources "/boards", BoardController, except: [:new, :edit]
     post "/users/me", UserController, :save_or_update
   end
 end

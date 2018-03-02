@@ -22,6 +22,7 @@ defmodule Ping.Post do
     has_many   :comments, Ping.Comment, on_delete: :delete_all
     has_many   :images, Ping.Image, on_delete: :delete_all
     belongs_to :user, Ping.User
+    belongs_to :board, Ping.Board
     timestamps()
   end
 

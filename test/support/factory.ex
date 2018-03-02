@@ -42,6 +42,13 @@ defmodule Ping.Factory do
       content: "sdfasd"
     }
   end
+  def board_factory do
+    %Ping.Board{
+      name: "2333",
+      description: "asdfadsfadsf"
+    }
+  end
+
 
 
 

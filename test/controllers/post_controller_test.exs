@@ -24,6 +24,17 @@ defmodule Ping.PostControllerTest do
     conn = get conn, post_path(conn, :index)
     assert json_response(conn, 200)["data"] == []
   end
+
+  test "page with board", %{conn: conn} do 
+    
+    board = insert(:board)
+    insert_list(6, :post)
+    insert_list(6, :post, board: board)
+    conn = get conn, post_path(conn, :index, %{board_id: board.id})
+    assert length(json_response(conn,200)["data"])  === 6
+
+  end
+ 
   test "page the not empty list", %{conn: conn} do 
     user =  Repo.insert! User.changeset(%User{}, %{nickname: "121", avatar_url: "http://www.a/b.jpg", openid: "12213"})
     changeset = Post.changeset(%Post{}, @valid_attrs) 
