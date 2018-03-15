@@ -33,7 +33,7 @@ defmodule Ping.Post do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:dream, :reality, :progress, :user_id, :count, :comments_count, :forward_count])
+    |> cast(params, [:dream, :reality, :progress, :user_id, :count, :comments_count, :forward_count, :board_id])
     |> validate_required([:dream, :user_id])
   end
 
